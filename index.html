@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PatelTales</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
             margin: 0;
@@ -13,11 +14,11 @@
             color: #ffffff;
             font-family: Arial, sans-serif;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
             text-align: center;
-            flex-direction: column;
         }
         img {
             max-width: 200px;
@@ -27,19 +28,23 @@
             font-size: 2rem;
             margin-bottom: 40px;
         }
-        .social-links {
-            margin-top: auto;
-            font-size: 0.9rem;
-            color: #ccc;
+        footer {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+        }
+        footer p {
+            margin: 10px 0;
         }
         .social-links a {
-            color: #ccc;
+            color: #ffffff;
+            margin: 0 10px;
+            font-size: 1.5rem;
             text-decoration: none;
-            display: block;
-            margin: 4px 0;
         }
         .social-links a:hover {
-            color: #fff;
+            color: #ffcc00;
         }
     </style>
 </head>
@@ -47,11 +52,16 @@
     <img src="pateltales_white_logo.png" alt="PatelTales Logo">
     <h1>Website build in progress — thanks for landing here!</h1>
 
-    <div class="social-links">
-        <a href="https://instagram.com/pateltales" target="_blank">📸 Pateltales Instagram: instagram.com/pateltales</a>
-        <a href="https://instagram.com/pateltales" target="_blank">📷 Pateltales Photography Instagram: instagram.com/pateltales</a>
-        <a href="https://twitter.com/pateltales" target="_blank">🐦 Twitter: twitter.com/pateltales</a>
-        <a href="https://x.com/pateltales" target="_blank">❌ X: x.com/pateltales</a>
-    </div>
+    <footer>
+        <p>&copy; 2024 PatelTales</p>
+        <div class="social-links">
+            <a href="https://instagram.com/pateltales" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="https://instagram.com/pateltales" target="_blank" title="Photography Instagram"><i class="fas fa-camera-retro"></i></a>
+            <a href="https://twitter.com/pateltales" target="_blank" title="Twitter"><i class="fab fa-twitter"></i></a>
+            <a href="https://x.com/pateltales" target="_blank" title="X"><i class="fab fa-x-twitter"></i></a>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>
