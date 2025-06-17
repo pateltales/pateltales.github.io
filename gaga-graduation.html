@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -52,6 +53,7 @@
         opacity: 0;
         transform: translateY(-20px);
       }
+
       to {
         opacity: 1;
         transform: translateY(0);
@@ -177,22 +179,25 @@
       h1 {
         font-size: 1.8rem;
       }
+
       .nav-buttons {
         flex-direction: column;
         gap: 10px;
       }
+
       #gallery a img {
         height: 150px;
       }
     }
   </style>
 </head>
+
 <body>
   <img class="logo" src="pateltales_white_logo.png" alt="PatelTales Logo" />
 
   <div class="nav-buttons">
     <button onclick="window.location.href='index.html'">PatelTales Photography</button>
-    <button onclick="alert('Redirect to Podcast Page')">PatelTales Podcast</button>
+    <button onclick="window.location.href='podcast.html'">PatelTales Podcast</button>
   </div>
 
 
@@ -207,15 +212,10 @@
   <footer>
     <p>&copy; 2024 PatelTales</p>
     <div class="social-links">
-      <a href="https://instagram.com/pateltales_photography" target="_blank" title="Instagram"
-        ><i class="fab fa-instagram"></i
-      ></a>
-      <a href="https://twitter.com/pateltales" target="_blank" title="Twitter"
-        ><i class="fab fa-twitter"></i
-      ></a>
-      <a href="https://x.com/pateltales" target="_blank" title="X"
-        ><i class="fab fa-x-twitter"></i
-      ></a>
+      <a href="https://instagram.com/pateltales_photography" target="_blank" title="Instagram"><i
+          class="fab fa-instagram"></i></a>
+      <a href="https://twitter.com/pateltales" target="_blank" title="Twitter"><i class="fab fa-twitter"></i></a>
+      <a href="https://x.com/pateltales" target="_blank" title="X"><i class="fab fa-x-twitter"></i></a>
     </div>
   </footer>
 
@@ -316,4 +316,5 @@
     loadGalleryFromS3();
   </script>
 </body>
+
 </html>
