@@ -192,16 +192,16 @@
     // Detect current page from pathname for dynamic content
     const page = window.location.pathname;
 
-    if (page.includes("gaga_graduation")) {
+    if (page.includes("gaga-graduation")) {
       // Redirect to the gallery page if loaded here just in case
-      window.location.href = "gaga_graduation.html";
+      window.location.href = "gaga-graduation.html";
     } else {
       // Home page content - gallery tile(s)
       const content = document.getElementById("content");
       content.innerHTML = `
         <h1>Welcome to PatelTales Photography</h1>
         <div class="gallery-tile">
-          <a class="event" href="gaga_graduation.html" aria-label="Gaga Graduation Gallery">
+          <a class="event" href="gaga-graduation.html" aria-label="Gaga Graduation Gallery">
             <img src="https://pateltales-photography.s3.us-east-2.amazonaws.com/gaga-graduation/DSC06679.jpg" alt="Gaga Graduation" loading="lazy" />
             <div class="event-title">Gaga Graduation</div>
           </a>

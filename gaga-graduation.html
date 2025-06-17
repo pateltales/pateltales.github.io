@@ -195,8 +195,6 @@
     <button onclick="alert('Redirect to Podcast Page')">PatelTales Podcast</button>
   </div>
 
-  <h1 class="fade-in">Gaga Graduation Gallery</h1>
-
 
   <div id="gallery">Loading photos...</div>
 
@@ -237,7 +235,7 @@
 
       try {
         const res = await fetch(
-          "https://pateltales-photography.s3.us-east-2.amazonaws.com?list-type=2&prefix=gaga_graduation/"
+          "https://pateltales-photography.s3.us-east-2.amazonaws.com?list-type=2&prefix=gaga-graduation/"
         );
         const text = await res.text();
         const parser = new DOMParser();
