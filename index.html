@@ -1,202 +1,253 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>PatelTales Photography</title>
+    <link rel="icon" href="pateltales_white_logo.png" type="image/png" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PatelTales Photography</title>
 
-  <!-- Fonts & Icons -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-  <link href="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/css/lightgallery-bundle.min.css" rel="stylesheet"/>
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/css/lightgallery-bundle.min.css" rel="stylesheet" />
 
-  <style>
-    /* Global reset & base */
-    body {
-      margin: 0;
-      padding: 0;
-      background: #0a0a0a;
-      color: #fff;
-      font-family: 'Poppins', sans-serif;
-      overflow-x: hidden;
-    }
-    a { color: inherit; text-decoration: none; }
+    <style>
+        /* Global reset & base */
+        body {
+            margin: 0;
+            padding: 0;
+            background: #0a0a0a;
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+        }
 
-    /* Hero Section */
-    .hero {
-      position: relative;
-      background: url('https://YOUR_HERO_IMAGE.jpg') center/cover no-repeat;
-      height: 80vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-    }
-    .hero::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: rgba(0,0,0,0.5);
-    }
-    .hero-content {
-      position: relative;
-      z-index: 1;
-    }
-    .hero h1 {
-      font-size: 3rem;
-      margin: 0 0 10px;
-      font-weight: 700;
-      letter-spacing: 2px;
-      animation: fadeInUp 1.2s ease-out both;
-    }
-    .hero p {
-      font-size: 1.2rem;
-      margin-bottom: 20px;
-      animation: fadeInUp 1.4s ease-out both;
-    }
-    .hero .btn {
-      padding: 15px 30px;
-      background: linear-gradient(135deg,#ffcc00,#ff9900);
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: 700;
-      animation: fadeInUp 1.6s ease-out both;
-    }
-    @keyframes fadeInUp {
-      0% { opacity:0; transform: translateY(20px); }
-      100% { opacity:1; transform: translateY(0); }
-    }
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
 
-    main {
-      padding: 60px 20px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-    .gallery-tile {
-      display: grid;
-      grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
-      gap: 24px;
-      margin-bottom: 60px;
-    }
-    .event {
-      background:#1a1a1a;
-      border-radius:14px;
-      box-shadow:0 6px 16px rgba(255,255,255,0.1);
-      overflow:hidden;
-      transition:transform 0.3s,box-shadow 0.3s;
-      display:flex;
-      flex-direction:column;
-    }
-    .event:hover {
-      transform: translateY(-6px);
-      box-shadow:0 10px 30px rgba(255,204,0,0.6);
-    }
-    .event img {
-      width:100%;
-      height:190px;
-      object-fit:cover;
-      border-bottom:3px solid #ffcc00;
-    }
-    .event-title { padding:18px 15px; font-size:1.3rem; font-weight:700; }
-    .nav-buttons {
-      margin-top: 30px;
-      display: flex;
-      gap: 20px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    .nav-buttons button {
-      padding:12px 28px;
-      background:linear-gradient(135deg,#ffcc00,#ff9900);
-      color:#0a0a0a;
-      font-weight:700;
-      border:none;
-      border-radius:8px;
-      cursor:pointer;
-      transition:transform .2s,box-shadow .2s;
-    }
-    .nav-buttons button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 18px rgba(255,204,0,0.5);
-    }
-    footer {
-      background:#111;
-      padding:30px 10px;
-      color:#aaa;
-      font-size:.9rem;
-      text-align:center;
-      border-top:1px solid #222;
-    }
-    .social-links a {
-      color:#fff;
-      margin:0 12px;
-      font-size:1.6rem;
-      transition:color .3s;
-    }
-    .social-links a:hover { color:#ffcc00; }
+        /* Hero Section */
+        .hero {
+            position: relative;
+            background: url('https://YOUR_HERO_IMAGE.jpg') center/cover no-repeat;
+            height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
 
-    @media(max-width:600px){
-      .hero h1 { font-size:2.2rem; }
-      .hero p { font-size:1rem; }
-      .nav-buttons { flex-direction:column; gap:12px; }
-    }
-  </style>
+        .hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin: 0 0 10px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            animation: fadeInUp 1.2s ease-out both;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            animation: fadeInUp 1.4s ease-out both;
+        }
+
+        .hero .btn {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #ffcc00, #ff9900);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 700;
+            animation: fadeInUp 1.6s ease-out both;
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        main {
+            padding: 60px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .gallery-tile {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 60px;
+        }
+
+        .event {
+            background: #1a1a1a;
+            border-radius: 14px;
+            box-shadow: 0 6px 16px rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .event:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 10px 30px rgba(255, 204, 0, 0.6);
+        }
+
+        .event img {
+            width: 100%;
+            height: 190px;
+            object-fit: cover;
+            border-bottom: 3px solid #ffcc00;
+        }
+
+        .event-title {
+            padding: 18px 15px;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .nav-buttons {
+            margin-top: 30px;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .nav-buttons button {
+            padding: 12px 28px;
+            background: linear-gradient(135deg, #ffcc00, #ff9900);
+            color: #0a0a0a;
+            font-weight: 700;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform .2s, box-shadow .2s;
+        }
+
+        .nav-buttons button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 18px rgba(255, 204, 0, 0.5);
+        }
+
+        footer {
+            background: #111;
+            padding: 30px 10px;
+            color: #aaa;
+            font-size: .9rem;
+            text-align: center;
+            border-top: 1px solid #222;
+        }
+
+        .social-links a {
+            color: #fff;
+            margin: 0 12px;
+            font-size: 1.6rem;
+            transition: color .3s;
+        }
+
+        .social-links a:hover {
+            color: #ffcc00;
+        }
+
+        @media(max-width:600px) {
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .nav-buttons {
+                flex-direction: column;
+                gap: 12px;
+            }
+        }
+    </style>
 </head>
+
 <body>
 
-  <!-- Hero -->
-  <section class="hero">
-    <div class="hero-content">
-      <img class="logo" src="pateltales_white_logo.png" alt="PatelTales Logo" width="180"/>
-      <h1>Capturing Moments That Matter</h1>
-      <p>Real moments. Honest stories. Timeless photographs.</p>
-      <button class="btn" onclick="document.getElementById('gallery').scrollIntoView({ behavior: 'smooth' });">
-        Explore Galleries
-      </button>
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-content">
+            <img class="logo" src="pateltales_white_logo.png" alt="PatelTales Logo" width="180" />
+            <h1>Capturing Moments That Matter</h1>
+            <p>Real moments. Honest stories. Timeless photographs.</p>
+            <button class="btn" onclick="document.getElementById('gallery').scrollIntoView({ behavior: 'smooth' });">
+                Explore Galleries
+            </button>
+        </div>
+    </section>
+
+    <!-- Navigation -->
+    <div class="nav-buttons">
+        <button onclick="location.href='index.html'">PatelTales Photography</button>
+        <button onclick="location.href='podcast.html'">PatelTales Podcast</button>
     </div>
-  </section>
 
-  <!-- Navigation -->
-  <div class="nav-buttons">
-    <button onclick="location.href='index.html'">PatelTales Photography</button>
-    <button onclick="location.href='podcast.html'">PatelTales Podcast</button>
-  </div>
+    <!-- Gallery -->
+    <main id="gallery">
+        <div class="gallery-tile">
+            <a class="event" href="gaga-graduation.html" aria-label="Gaga Graduation Gallery">
+                <img src="https://pateltales-photography.s3.us-east-2.amazonaws.com/gaga-graduation/DSC06679.jpg"
+                    alt="Gaga Graduation" />
+                <div class="event-title">Gaga Graduation</div>
+            </a>
+            <a class="event" href="huskies.html" aria-label="Huskies Graduation Ceremony">
+                <img src="https://pateltales-photography.s3.us-east-2.amazonaws.com/huskies/DSC06336.jpg"
+                    alt="Huskies Graduation Ceremony" />
+                <div class="event-title">Huskies Graduation</div>
+            </a>
+            <a class="event" href="soaring-eagle-2025.html" aria-label="Soaring Eagle 2025">
+                <img src="https://pateltales-photography.s3.us-east-2.amazonaws.com/soaring-eagle-2025/DSC05423.jpg"
+                    alt="Soaring Eagle 2025" />
+                <div class="event-title">Soaring Eagle 2025</div>
+            </a>
+        </div>
+    </main>
 
-  <!-- Gallery -->
-  <main id="gallery">
-    <div class="gallery-tile">
-      <a class="event" href="gaga-graduation.html" aria-label="Gaga Graduation Gallery">
-        <img src="https://pateltales-photography.s3.us-east-2.amazonaws.com/gaga-graduation/DSC06679.jpg" alt="Gaga Graduation"/>
-        <div class="event-title">Gaga Graduation</div>
-      </a>
-      <a class="event" href="huskies.html" aria-label="Huskies Graduation Ceremony">
-        <img src="https://pateltales-photography.s3.us-east-2.amazonaws.com/huskies/DSC06336.jpg" alt="Huskies Graduation Ceremony"/>
-        <div class="event-title">Huskies Graduation</div>
-      </a>
-      <a class="event" href="soaring-eagle-2025.html" aria-label="Soaring Eagle 2025">
-        <img src="https://pateltales-photography.s3.us-east-2.amazonaws.com/soaring-eagle-2025/DSC05423.jpg" alt="Soaring Eagle 2025"/>
-        <div class="event-title">Soaring Eagle 2025</div>
-      </a>
-    </div>
-  </main>
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 PatelTales</p>
+        <div class="social-links">
+            <a href="https://instagram.com/pateltales_photography" target="_blank" title="Instagram"><i
+                    class="fab fa-instagram"></i></a>
+            <a href="https://x.com/pateltales" target="_blank" title="X"><i class="fab fa-twitter"></i></a>
+            <a href="mailto:pateltalesconnect@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
+        </div>
+    </footer>
 
-  <!-- Footer -->
-  <footer>
-    <p>&copy; 2025 PatelTales</p>
-    <div class="social-links">
-      <a href="https://instagram.com/pateltales_photography" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
-      <a href="https://x.com/pateltales" target="_blank" title="X"><i class="fab fa-twitter"></i></a>
-      <a href="mailto:pateltalesconnect@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
-    </div>
-  </footer>
-
-  <!-- Lightgallery scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/lightgallery.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/plugins/zoom/lg-zoom.umd.min.js"></script>
-  <script>
-    // LightGallery initialization omitted – handled per-gallery in sub-pages or inline as needed.
-  </script>
+    <!-- Lightgallery scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/lightgallery.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/plugins/zoom/lg-zoom.umd.min.js"></script>
+    <script>
+        // LightGallery initialization omitted – handled per-gallery in sub-pages or inline as needed.
+    </script>
 
 </body>
+
 </html>
