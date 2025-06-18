@@ -202,7 +202,10 @@
         } else if (page.includes("huskies")) {
             // Redirect to the gallery page if loaded here just in case
             window.location.href = "huskies.html";
-        } else {
+        } else  if (page.includes("soaring-eagle-2025")) {
+            // Redirect to the gallery page if loaded here just in case
+            window.location.href = "soaring-eagle-2025.html";
+        } else{
             // Home page content - gallery tile(s)
             const content = document.getElementById("content");
             content.innerHTML = `
@@ -215,6 +218,10 @@
           <a class="event" href="huskies.html" aria-label="Huskies Graduation Ceremony">
             <img src="https://pateltales-photography.s3.us-east-2.amazonaws.com/huskies/DSC06336.jpg" alt="Huskies Graduation Ceremony" loading="lazy" />
             <div class="event-title">Huskies Graduation Ceremony</div>
+          </a>
+          <a class="event" href="soaring-eagle-2025.html" aria-label="Soaring Eagle 2025">
+            <img src="https://pateltales-photography.s3.us-east-2.amazonaws.com/soaring-eagle-2025/DSC05423.jpg" alt="Soaring Eagle 2025" loading="lazy" />
+            <div class="event-title">Soaring Eagle 2025</div>
           </a>
         </div>
       `;
