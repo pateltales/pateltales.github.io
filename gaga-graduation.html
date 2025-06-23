@@ -6,9 +6,9 @@
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-VB4MGSEDXR"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
+    function gtag() { dataLayer.push(arguments); }
     gtag('js', new Date());
-  
+
     gtag('config', 'G-VB4MGSEDXR');
   </script>
   <link rel="icon" href="pateltales_white_logo.png" type="image/png" />
@@ -307,7 +307,24 @@
       galleryInstance = lightGallery(gallery, {
         plugins: [lgZoom],
         speed: 300,
+        licenseKey: '0000-0000-000-0000', // (optional, safe placeholder)
       });
+
+      gallery.addEventListener("lgAfterSlide", (event) => {
+        const currentIndex = event.detail.index;
+        const imageKey = keys[(currentPage - 1) * IMAGES_PER_PAGE + currentIndex];
+        const imageName = imageKey.split("/").pop();
+
+        console.log('Image opened:', imageName);
+
+        gtag('event', 'open_image', {
+          event_category: 'Gallery',
+          event_label: imageName,
+          value: 1
+        });
+      });
+
+
 
       // Update pagination buttons
       document.getElementById("prevBtn").disabled = currentPage === 1;
