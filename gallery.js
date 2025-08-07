@@ -1,17 +1,16 @@
 // shared/gallery.js
 
-const IMAGES_PER_PAGE = 50;
+const IMAGES_PER_PAGE = 500;
 let keys = [];
 let currentPage = 1;
 let galleryInstance;
 
-function loadGallery(prefix) {
+function loadGallery(prefix, bucket="pateltales-photography") {
   const gallery = document.getElementById("gallery");
   const pagination = document.getElementById("pagination");
   gallery.innerHTML = "Loading photos...";
   pagination.style.display = "none";
-
-  fetch(`https://pateltales-photography.s3.us-east-2.amazonaws.com?list-type=2&prefix=${prefix}`)
+  fetch(`https://${bucket}.s3.us-east-2.amazonaws.com?list-type=2&prefix=${prefix}`)
     .then(res => res.text())
     .then(text => {
       const parser = new DOMParser();
@@ -28,7 +27,7 @@ function loadGallery(prefix) {
 
       currentPage = 1;
       pagination.style.display = "flex";
-      renderPage();
+      renderPage(bucket);
     })
     .catch(err => {
       console.error(err);
@@ -36,7 +35,7 @@ function loadGallery(prefix) {
     });
 }
 
-function renderPage() {
+function renderPage(bucket="pateltales-photography") {
   const gallery = document.getElementById("gallery");
   gallery.innerHTML = "";
 
@@ -45,7 +44,7 @@ function renderPage() {
   const pageKeys = keys.slice(startIndex, endIndex);
 
   pageKeys.forEach(key => {
-    const url = `https://pateltales-photography.s3.us-east-2.amazonaws.com/${key}`;
+    const url = `https://${bucket}.s3.us-east-2.amazonaws.com/${key}`;
     const a = document.createElement("a");
     a.href = url;
     a.setAttribute("data-lg-size", "1600-1067");
@@ -53,7 +52,7 @@ function renderPage() {
     const img = document.createElement("img");
     img.src = url;
     img.alt = key.split("/").pop();
-    img.loading = "lazy";
+    // img.loading = "lazy";
     a.appendChild(img);
     gallery.appendChild(a);
   });
