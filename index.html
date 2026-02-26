@@ -17,6 +17,7 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/css/lightgallery-bundle.min.css" rel="stylesheet" />
 
     <style>
         *, *::before, *::after { box-sizing: border-box; }
@@ -24,7 +25,7 @@
         body {
             margin: 0;
             padding: 0;
-            background: #fff;
+            background: #111;
             color: #1a1a1a;
             font-family: 'Poppins', sans-serif;
             overflow-x: hidden;
@@ -41,89 +42,248 @@
             align-items: center;
             justify-content: space-between;
             padding: 14px 36px;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.0);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.0);
+            transition: background 0.4s ease, border-color 0.4s ease,
+                        box-shadow 0.4s ease;
+        }
+
+        /* Nav becomes frosted when user scrolls down */
+        .nav.scrolled {
+            background: rgba(255, 255, 255, 0.93);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            box-shadow: 0 1px 24px rgba(0, 0, 0, 0.06);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
         }
 
         .nav-logo img {
             height: 32px;
             display: block;
+            /* Logo inverts: white on dark photo, dark when nav is frosted */
+            filter: invert(1) brightness(2);
+            transition: filter 0.4s ease;
+        }
+
+        .nav.scrolled .nav-logo img {
+            filter: none;
         }
 
         .nav-links {
             display: flex;
-            gap: 24px;
+            gap: 28px;
             align-items: center;
         }
 
         .nav-links a {
-            font-size: 0.72rem;
+            font-size: 0.70rem;
             font-weight: 500;
-            letter-spacing: 1.2px;
+            letter-spacing: 1.6px;
             text-transform: uppercase;
-            color: #1a1a1a;
+            color: rgba(255, 255, 255, 0.88);
             transition: color 0.2s;
+            text-shadow: 0 1px 6px rgba(0, 0, 0, 0.4);
         }
 
-        .nav-links a:hover { color: #999; }
+        .nav.scrolled .nav-links a {
+            color: #1a1a1a;
+            text-shadow: none;
+        }
 
-        /* ── Masonry Grid ── */
+        .nav-links a:hover { opacity: 0.6; }
+
+        .nav-links a.active {
+            border-bottom: 1.5px solid currentColor;
+            padding-bottom: 2px;
+        }
+
+        /* ── Hamburger ── */
+        .nav-toggle {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 6px;
+            z-index: 200;
+        }
+
+        .nav-toggle span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 2px;
+            transition: background 0.4s;
+        }
+
+        .nav.scrolled .nav-toggle span { background: #1a1a1a; }
+
+        /* ── Masonry ── */
         .masonry-wrap {
-            padding-top: 61px; /* nav height */
+            padding-top: 0; /* photos go full-bleed under transparent nav */
         }
 
         .masonry {
             columns: 3 280px;
-            column-gap: 3px;
-            padding: 3px;
+            column-gap: 2px;
+            padding: 0;
+            line-height: 0; /* removes whitespace gaps between inline blocks */
         }
 
         .masonry-item {
             break-inside: avoid;
-            margin-bottom: 3px;
+            margin-bottom: 2px;
             overflow: hidden;
-            cursor: default;
+            position: relative;
+            cursor: zoom-in;
+            line-height: 0;
+        }
+
+        /* Dark overlay that fades in on hover */
+        .masonry-item::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.28);
+            opacity: 0;
+            transition: opacity 0.35s ease;
+            pointer-events: none;
+        }
+
+        .masonry-item:hover::after { opacity: 1; }
+
+        .masonry-item a {
+            display: block;
+            line-height: 0;
         }
 
         .masonry-item img {
             width: 100%;
             display: block;
-            transition: transform 0.6s ease, filter 0.4s ease;
+            opacity: 0;
+            transition: opacity 0.55s ease, transform 0.55s ease;
+            transform: scale(1.01);
+        }
+
+        /* Image fades in once loaded */
+        .masonry-item img.loaded {
+            opacity: 1;
+            transform: scale(1);
         }
 
         .masonry-item:hover img {
-            transform: scale(1.03);
-            filter: brightness(1.04);
+            transform: scale(1.04);
+        }
+
+        /* ── Hero intro text ── */
+        /* A short, centred tagline that floats over the first row of photos */
+        .hero-intro {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            z-index: 10;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding-top: 140px;
+            padding-bottom: 40px;
+            background: linear-gradient(
+                to bottom,
+                rgba(0,0,0,0.55) 0%,
+                rgba(0,0,0,0.15) 70%,
+                rgba(0,0,0,0.0) 100%
+            );
+        }
+
+        .hero-intro h1 {
+            margin: 0 0 16px;
+            font-size: clamp(3rem, 7vw, 6rem);
+            font-weight: 600;
+            letter-spacing: 10px;
+            text-transform: uppercase;
+            color: #fff;
+            text-shadow: 0 2px 24px rgba(0,0,0,0.5);
+        }
+
+        .hero-intro p {
+            margin: 0;
+            font-size: clamp(0.75rem, 1.4vw, 1rem);
+            font-weight: 300;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.75);
+            text-shadow: 0 1px 10px rgba(0,0,0,0.4);
         }
 
         /* ── Footer ── */
         footer {
-            background: #fafafa;
-            padding: 24px 10px;
-            color: #bbb;
-            font-size: 0.78rem;
+            background: #111;
+            padding: 30px 10px;
+            color: #555;
+            font-size: 0.76rem;
             text-align: center;
-            border-top: 1px solid #ebebeb;
+            border-top: 1px solid #222;
         }
 
-        .social-links { margin-top: 10px; }
+        footer p { margin: 0 0 10px; }
 
         .social-links a {
-            color: #ccc;
+            color: #444;
             margin: 0 10px;
             font-size: 1.2rem;
             transition: color 0.25s;
         }
 
-        .social-links a:hover { color: #1a1a1a; }
+        .social-links a:hover { color: #fff; }
 
         /* ── Responsive ── */
-        @media (max-width: 600px) {
+        @media (max-width: 700px) {
             .nav { padding: 12px 20px; }
-            .nav-links { gap: 18px; }
-            .masonry { columns: 2 160px; }
+            .nav-toggle { display: flex; }
+
+            .nav-links {
+                display: none;
+                position: fixed;
+                top: 61px;
+                left: 0; right: 0;
+                background: rgba(17, 17, 17, 0.97);
+                backdrop-filter: blur(16px);
+                -webkit-backdrop-filter: blur(16px);
+                flex-direction: column;
+                align-items: center;
+                gap: 22px;
+                padding: 28px 0;
+                border-bottom: 1px solid rgba(255,255,255,0.08);
+                z-index: 99;
+            }
+
+            .nav.scrolled .nav-links {
+                background: rgba(255, 255, 255, 0.97);
+                border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+            }
+
+            .nav-links.open { display: flex; }
+
+            /* When hamburger menu is open the links show dark or light depending on nav state */
+            .nav-links a {
+                color: rgba(255,255,255,0.88);
+                text-shadow: none;
+            }
+
+            .nav.scrolled .nav-links a { color: #1a1a1a; }
+
+            .masonry { columns: 2 150px; }
+
+            .hero-intro { padding-top: 100px; }
+            .hero-intro h1 { letter-spacing: 3px; }
+        }
+
+        @media (min-width: 1600px) {
+            .masonry { columns: 4 280px; }
         }
     </style>
 </head>
@@ -131,22 +291,33 @@
 <body>
 
     <!-- Nav -->
-    <nav class="nav">
+    <nav class="nav" id="main-nav">
         <a class="nav-logo" href="index.html">
             <img src="pateltales_logo.png" alt="PatelTales" />
         </a>
-        <div class="nav-links">
-            <a href="galleries.html?tab=ana">ANA Track Coaching</a>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+        <div class="nav-links" id="nav-links">
+            <a href="index.html" class="active">Home</a>
+            <a href="galleries.html?tab=ana">ANA Run Coaching</a>
             <a href="galleries.html?tab=orca">Orca Running</a>
             <a href="galleries.html?tab=general">Gallery</a>
             <a href="podcast.html">Podcast</a>
+            <a href="about.html">About</a>
         </div>
     </nav>
 
-    <!-- Mosaic -->
+    <!-- Masonry grid (full-bleed, under transparent nav) -->
     <div class="masonry-wrap">
+        <!-- Hero intro text floats over the top of the grid -->
+        <div class="hero-intro" id="hero-intro">
+            <h1>PatelTales</h1>
+            <p>Race &nbsp;·&nbsp; Weddings &nbsp;·&nbsp; Portraits &nbsp;·&nbsp; Stories</p>
+        </div>
+
         <div class="masonry" id="masonry">
-            <!-- Injected from featured.js -->
+            <!-- Injected by JS -->
         </div>
     </div>
 
@@ -163,33 +334,99 @@
         </div>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/lightgallery.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/plugins/zoom/lg-zoom.umd.min.js"></script>
+
+    <script>
+        // ── Nav: transparent → frosted on scroll ──────────────────
+        const nav = document.getElementById('main-nav');
+        const heroIntro = document.getElementById('hero-intro');
+
+        function onScroll() {
+            const scrolled = window.scrollY > 50;
+            nav.classList.toggle('scrolled', scrolled);
+            // Fade hero intro text out as user scrolls
+            if (heroIntro) {
+                const fade = Math.max(0, 1 - window.scrollY / 260);
+                heroIntro.style.opacity = fade;
+            }
+        }
+
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll(); // run once on load
+
+        // ── Hamburger ─────────────────────────────────────────────
+        document.getElementById('nav-toggle').addEventListener('click', function () {
+            document.getElementById('nav-links').classList.toggle('open');
+        });
+    </script>
+
     <script src="featured.js"></script>
     <script>
         const grid = document.getElementById('masonry');
+        let lgInstance = null;
 
         fetch(`${S3_BASE}?list-type=2&prefix=${FEATURED_FOLDER}/`)
             .then(res => res.text())
             .then(text => {
-                const xml   = new DOMParser().parseFromString(text, 'application/xml');
-                const keys  = Array.from(xml.getElementsByTagName('Key'))
+                const xml  = new DOMParser().parseFromString(text, 'application/xml');
+                const keys = Array.from(xml.getElementsByTagName('Key'))
                     .map(k => k.textContent)
                     .filter(k => k.match(/\.(jpe?g|png)$/i));
 
-                // Shuffle so order is different every visit
+                // Shuffle so order varies every visit
                 for (let i = keys.length - 1; i > 0; i--) {
                     const j = Math.floor(Math.random() * (i + 1));
                     [keys[i], keys[j]] = [keys[j], keys[i]];
                 }
 
-                keys.forEach(key => {
+                const fragment = document.createDocumentFragment();
+
+                keys.forEach((key, idx) => {
+                    const url  = `${S3_BASE}/${key}`;
                     const item = document.createElement('div');
                     item.className = 'masonry-item';
-                    item.innerHTML = `<img src="${S3_BASE}/${key}" alt="" loading="lazy" />`;
-                    grid.appendChild(item);
+
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.setAttribute('data-lg-size', '1600-1067');
+
+                    const img      = document.createElement('img');
+                    img.src        = url;
+                    img.alt        = '';
+                    img.loading    = idx < 9 ? 'eager' : 'lazy';
+                    img.decoding   = 'async';
+
+                    // Fade in as each image loads
+                    img.addEventListener('load', function () {
+                        this.classList.add('loaded');
+                    });
+                    // If already cached, fire immediately
+                    if (img.complete) img.classList.add('loaded');
+
+                    a.appendChild(img);
+                    item.appendChild(a);
+                    fragment.appendChild(item);
+                });
+
+                grid.appendChild(fragment);
+
+                // Init LightGallery on the masonry container
+                lgInstance = lightGallery(grid, {
+                    plugins:     [lgZoom],
+                    speed:       300,
+                    download:    false,
+                    counter:     true,
+                    selector:    '.masonry-item a',
+                    swipeToClose: true,
+                    mobileSettings: {
+                        controls:      true,
+                        showCloseIcon: true,
+                    },
                 });
             })
             .catch(() => {
-                grid.innerHTML = '<p style="padding:40px;color:#aaa;">Could not load photos.</p>';
+                grid.innerHTML = '<p style="padding:60px 40px;color:#555;font-family:sans-serif;">Could not load photos.</p>';
             });
     </script>
 

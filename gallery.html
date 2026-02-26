@@ -30,11 +30,16 @@
         <a class="nav-logo" href="index.html">
             <img src="pateltales_logo.png" alt="PatelTales" />
         </a>
-        <div class="nav-links">
-            <a href="galleries.html?tab=ana">ANA Track Coaching</a>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+        <div class="nav-links" id="nav-links">
+            <a href="index.html">Home</a>
+            <a href="galleries.html?tab=ana">ANA Run Coaching</a>
             <a href="galleries.html?tab=orca">Orca Running</a>
             <a href="galleries.html?tab=general">Gallery</a>
             <a href="podcast.html">Podcast</a>
+            <a href="about.html">About</a>
         </div>
     </nav>
 
@@ -64,6 +69,11 @@
         </div>
     </footer>
 
+    <script>
+        document.getElementById('nav-toggle').addEventListener('click', function () {
+            document.getElementById('nav-links').classList.toggle('open');
+        });
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/lightgallery.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/plugins/zoom/lg-zoom.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/plugins/thumbnail/lg-thumbnail.umd.min.js"></script>

@@ -143,12 +143,50 @@
 
         .social-links a:hover { color: #1a1a1a; }
 
+        /* ── Hamburger ── */
+        .nav-toggle {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 6px;
+            z-index: 200;
+        }
+        .nav-toggle span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: #1a1a1a;
+            border-radius: 2px;
+            transition: all 0.25s;
+        }
+
         /* ── Responsive ── */
-        @media (max-width: 600px) {
+        @media (max-width: 700px) {
             .nav { padding: 12px 20px; }
-            .nav-links { gap: 18px; }
             .page { padding: 90px 16px 50px; }
             .gallery-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+            .nav-toggle { display: flex; }
+            .nav-links {
+                display: none;
+                position: fixed;
+                top: 61px;
+                left: 0; right: 0;
+                background: rgba(255, 255, 255, 0.97);
+                backdrop-filter: blur(16px);
+                -webkit-backdrop-filter: blur(16px);
+                flex-direction: column;
+                align-items: center;
+                gap: 22px;
+                padding: 28px 0;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+                z-index: 99;
+            }
+            .nav-links.open { display: flex; }
+            .nav-links a { font-size: 0.78rem; letter-spacing: 1.6px; }
         }
 
         @media (max-width: 420px) {
@@ -164,11 +202,16 @@
         <a class="nav-logo" href="index.html">
             <img src="pateltales_logo.png" alt="PatelTales" />
         </a>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
         <div class="nav-links" id="nav-links">
-            <a href="galleries.html?tab=ana">ANA Track Coaching</a>
+            <a href="index.html">Home</a>
+            <a href="galleries.html?tab=ana">ANA Run Coaching</a>
             <a href="galleries.html?tab=orca">Orca Running</a>
             <a href="galleries.html?tab=general">Gallery</a>
             <a href="podcast.html">Podcast</a>
+            <a href="about.html">About</a>
         </div>
     </nav>
 
@@ -193,6 +236,11 @@
         </div>
     </footer>
 
+    <script>
+        document.getElementById('nav-toggle').addEventListener('click', function () {
+            document.getElementById('nav-links').classList.toggle('open');
+        });
+    </script>
     <script src="galleries-data.js"></script>
     <script>
         // Read ?tab= from URL, default to first tab

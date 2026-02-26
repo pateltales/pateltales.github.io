@@ -195,24 +195,87 @@ footer.gallery-footer p {
   color: #1a1a1a;
 }
 
-@media screen and (max-width: 600px) {
+/* ── Hamburger (mobile nav) ── */
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  z-index: 200;
+}
+
+.nav-toggle span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: #1a1a1a;
+  border-radius: 2px;
+  transition: all 0.25s;
+}
+
+@media screen and (max-width: 700px) {
   h1 {
     font-size: 1.7rem;
   }
 
-  .nav-buttons {
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .nav-buttons button {
-    min-width: unset;
-    width: 220px;
-  }
-
   #gallery a img {
     height: 150px;
+  }
+
+  /* Hamburger visible on mobile */
+  .nav-toggle { display: flex; }
+
+  /* Nav links collapse to dropdown */
+  .nav-links {
+    display: none;
+    position: fixed;
+    top: 61px;
+    left: 0; right: 0;
+    background: rgba(255, 255, 255, 0.97);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    flex-direction: column;
+    align-items: center;
+    gap: 22px;
+    padding: 28px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    z-index: 99;
+  }
+
+  .nav-links.open { display: flex; }
+
+  .nav-links a {
+    font-size: 0.78rem;
+    letter-spacing: 1.6px;
+  }
+}
+
+/* ── Mobile LightGallery fixes — keep close btn always visible ── */
+@media screen and (max-width: 768px) {
+  .lg-toolbar {
+    opacity: 1 !important;
+    background: rgba(255, 255, 255, 0.97) !important;
+  }
+
+  .lg-close,
+  .lg-toolbar .lg-icon {
+    opacity: 1 !important;
+    color: #1a1a1a !important;
+    width: 48px !important;
+    height: 48px !important;
+    line-height: 48px !important;
+    font-size: 1.3rem !important;
+  }
+
+  .lg-actions .lg-next,
+  .lg-actions .lg-prev {
+    width: 38px;
+    height: 38px;
+    line-height: 38px;
   }
 }
 

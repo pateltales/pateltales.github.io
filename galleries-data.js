@@ -9,7 +9,7 @@
 //   title    — display name shown in the gallery grid and page title
 //   cover    — filename of the cover/thumbnail photo
 //   category — which tab it appears under:
-//                'ana'     → ANA Track Coaching
+//                'ana'     → ANA Run Coaching
 //                'orca'    → Orca Running
 //                'general' → Gallery
 // ============================================================
@@ -36,7 +36,7 @@ const GALLERIES = [
 ];
 
 const TABS = [
-  { id: 'ana',     label: 'ANA Track Coaching' },
+  { id: 'ana',     label: 'ANA Run Coaching' },
   { id: 'orca',    label: 'Orca Running'        },
   { id: 'general', label: 'Gallery'             },
 ];

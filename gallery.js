@@ -106,6 +106,13 @@ function renderPage(bucket = 'pateltales-photography') {
         thumbWidth:    100,
         thumbHeight:   '80px',
         zoomFromOrigin: true,
+        swipeToClose:  true,
+        mobileSettings: {
+            controls:      true,
+            showCloseIcon: true,
+            download:      true,
+            rotate:        false,
+        },
     });
 
     setPaginationVisible(keys.length > IMAGES_PER_PAGE);
