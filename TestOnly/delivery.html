@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark" />
+  <title>Delivery • Gallery</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <style>
+    :root{
+      --bg:#0b0b0b; --fg:#f4f4f5; --muted:#9ca3af; --btn:#1f2937; --btnH:#374151;
+      --gap:2px;              /* tighter collage spacing */
+      --row-target:150px;     /* base target row height (small) */
+      --row-max:220px;        /* hard cap on any row's height */
+      --row-max-scale:1.12;   /* limit stretching within a row */
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;background:var(--bg);color:var(--fg);font-family:Inter,ui-sans-serif,system-ui,Arial}
+
+    .header,.footer{max-width:1200px;margin:24px auto;padding:0 16px}
+    .title-wrap{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    h1{margin:0;font-size:clamp(22px,4vw,36px);letter-spacing:.2px}
+    .meta{margin:6px 0 10px;color:var(--muted);font-size:14px}
+    .btn{background:var(--btn);color:var(--fg);border:1px solid #2a2a2a;padding:10px 14px;border-radius:999px;font-weight:600;cursor:pointer}
+    .btn[disabled]{opacity:.5;cursor:not-allowed}
+    .btn:hover:not([disabled]){background:var(--btnH)}
+    progress{width:220px;height:10px;appearance:none;border:none;border-radius:999px;overflow:hidden}
+    progress::-webkit-progress-bar{background:#222}
+    progress::-webkit-progress-value{background:#777}
+    .hidden{display:none}
+
+    /* Justified collage */
+    #gallery{width:100%;display:flex;flex-direction:column;gap:var(--gap)}
+    .row{display:flex;gap:var(--gap)}
+    .cell{position:relative;line-height:0;cursor:zoom-in}
+    .cell img{width:100%;height:100%;object-fit:cover;display:block;background:#111}
+
+    .footer{color:var(--muted);font-size:14px;text-align:center}
+
+    /* Lightbox */
+    .lightbox{
+      position:fixed; inset:0; display:none; align-items:center; justify-content:center;
+      background:rgba(0,0,0,.9); z-index:9999;
+    }
+    .lightbox.open{display:flex}
+    .lb-stage{
+      position:relative; width:100%; height:100%;
+      display:flex; align-items:center; justify-content:center; overflow:hidden;
+      touch-action:none;
+    }
+    .lb-img{will-change:transform; transform-origin:center center; user-select:none; -webkit-user-drag:none; max-width:none}
+    .lb-ui{
+      position:absolute; top:0; left:0; right:0;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:10px 14px; gap:10px;
+      background:linear-gradient(to bottom, rgba(0,0,0,.7), rgba(0,0,0,0));
+    }
+    .lb-title{font-weight:600}
+    .lb-controls{display:flex; gap:8px}
+    .icon-btn{
+      background:rgba(30,30,30,.8); border:1px solid rgba(255,255,255,.1);
+      color:#fff; padding:8px 12px; border-radius:999px; cursor:pointer; font-weight:600
+    }
+    .icon-btn:hover{background:rgba(60,60,60,.9)}
+    .lb-arrows{position:absolute; inset:0; pointer-events:none; display:flex; align-items:center; justify-content:space-between; padding:0 8px;}
+    .lb-arrow{pointer-events:auto; background:rgba(0,0,0,.55); border:1px solid rgba(255,255,255,.12); color:#fff; width:46px; height:46px; border-radius:50%; display:grid; place-content:center; font-weight:900; cursor:pointer;}
+    .lb-arrow:hover{background:rgba(0,0,0,.75)}
+    .lb-help{position:absolute; bottom:10px; left:0; right:0; text-align:center; color:#aaa; font-size:12px; background:linear-gradient(to top, rgba(0,0,0,.6), rgba(0,0,0,0)); padding:8px 0;}
+  </style>
+
+  <script defer src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <header class="header">
+    <div class="title-wrap">
+      <h1 id="title">Delivery</h1>
+      <button id="download-all" class="btn" disabled>Download All</button>
+    </div>
+    <p id="meta" class="meta">Loading…</p>
+    <progress id="progress" max="100" value="0" class="hidden"></progress>
+  </header>
+
+  <main id="gallery"></main>
+
+  <footer class="footer">
+    <p>© <span id="year"></span> Your Name • Photography</p>
+  </footer>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <div class="lb-stage" id="lb-stage" aria-label="Image viewer">
+      <img id="lb-img" class="lb-img" alt="">
+      <div class="lb-ui">
+        <div class="lb-title" id="lb-title"></div>
+        <div class="lb-controls">
+          <button class="icon-btn" id="lb-zoom-in">＋</button>
+          <button class="icon-btn" id="lb-zoom-out">－</button>
+          <button class="icon-btn" id="lb-reset">Reset</button>
+          <a class="icon-btn" id="lb-download" download>Download</a>
+          <button class="icon-btn" id="lb-close">Close ✕</button>
+        </div>
+      </div>
+      <div class="lb-arrows">
+        <button class="lb-arrow" id="lb-prev" aria-label="Previous">‹</button>
+        <button class="lb-arrow" id="lb-next" aria-label="Next">›</button>
+      </div>
+      <div class="lb-help">Scroll = Zoom • Drag = Pan • ←/→ = Prev/Next • Esc = Close • D = Download</div>
+    </div>
+  </div>
+
+  <script>
+    // ===== CONFIG =====
+    const CONFIG = {
+      bucket: "tank-wedding",
+      region: "us-east-2",
+      prefix: "Batch1Sony/",
+      title: "Batch 1 Sony",
+      allowedExtensions: [".jpg",".jpeg",".png",".webp"],
+      targetRowHeight: 150, // will be responsive below
+      rowGap: 2,
+      maxScale: 1.12
+    };
+    // URL overrides (optional)
+    (function(){
+      const q=new URLSearchParams(location.search);
+      for(const k of ["bucket","region","prefix","title","targetRowHeight","rowGap","maxScale"]){
+        if(q.has(k)) CONFIG[k] = isNaN(+q.get(k)) ? q.get(k) : +q.get(k);
+      }
+    })();
+
+    // Responsive target
+    function computeResponsiveTarget(){
+      const w = window.innerWidth;
+      if (w >= 1600) return 145;
+      if (w >= 1200) return 150;
+      if (w >= 900)  return 170;
+      return 190;
+    }
+    CONFIG.targetRowHeight = computeResponsiveTarget();
+    window.addEventListener("resize", ()=>{ CONFIG.targetRowHeight = computeResponsiveTarget(); requestLayout(); });
+
+    // ===== DOM
+    const el = {
+      gallery: document.getElementById("gallery"),
+      meta: document.getElementById("meta"),
+      title: document.getElementById("title"),
+      btn: document.getElementById("download-all"),
+      bar: document.getElementById("progress"),
+      year: document.getElementById("year"),
+      lb: document.getElementById("lightbox"),
+      lbStage: document.getElementById("lb-stage"),
+      lbImg: document.getElementById("lb-img"),
+      lbTitle: document.getElementById("lb-title"),
+      lbPrev: document.getElementById("lb-prev"),
+      lbNext: document.getElementById("lb-next"),
+      lbClose: document.getElementById("lb-close"),
+      lbDownload: document.getElementById("lb-download"),
+      lbZoomIn: document.getElementById("lb-zoom-in"),
+      lbZoomOut: document.getElementById("lb-zoom-out"),
+      lbReset: document.getElementById("lb-reset")
+    };
+    el.year.textContent = new Date().getFullYear();
+    el.title.textContent = CONFIG.title;
+    document.documentElement.style.setProperty("--gap", CONFIG.rowGap + "px");
+
+    // ===== S3 helpers
+    // Use encoding-type=url so weird filenames don't break XML parsing
+    const S3_BASE = `https://${CONFIG.bucket}.s3.${CONFIG.region}.amazonaws.com`;
+    const isImage = (k) => CONFIG.allowedExtensions.some(ext => k.toLowerCase().endsWith(ext));
+    const keyToUrl = (k) => `${S3_BASE}/${k.split('/').map(encodeURIComponent).join('/')}`;
+
+    async function listAllKeys(prefix){
+      let keys = [], token = null;
+      while(true){
+        const url = new URL(S3_BASE);
+        url.searchParams.set("list-type","2");
+        url.searchParams.set("prefix", prefix.replace(/^\//,""));
+        url.searchParams.set("encoding-type","url");
+        if(token) url.searchParams.set("continuation-token", token);
+
+        const res = await fetch(url.toString());
+        if(!res.ok) throw new Error(`S3 list failed: ${res.status} ${res.statusText}`);
+        const xml = new DOMParser().parseFromString(await res.text(), "application/xml");
+        Array.from(xml.getElementsByTagName("Contents")).forEach(c=>{
+          const raw = c.getElementsByTagName("Key")[0]?.textContent || "";
+          const decoded = decodeURIComponent(raw);
+          if (decoded && isImage(decoded)) keys.push(decoded);
+        });
+        const tr = xml.getElementsByTagName("IsTruncated")[0]?.textContent === "true";
+        if (!tr) break;
+        token = xml.getElementsByTagName("NextContinuationToken")[0]?.textContent || null;
+        if (!token) break;
+      }
+      keys.sort((a,b)=>a.localeCompare(b,undefined,{numeric:true,sensitivity:"base"}));
+      return keys;
+    }
+
+    // ===== Justified layout with batched meta loading + timeouts
+    let metasGlobal = [];
+    let layoutRaf;
+    function requestLayout(){
+      cancelAnimationFrame(layoutRaf);
+      layoutRaf = requestAnimationFrame(() => layout(metasGlobal));
+    }
+
+    function layout(metas){
+      if (!metas.length) return;
+      el.gallery.innerHTML = "";
+      const gap = CONFIG.rowGap, target = CONFIG.targetRowHeight, maxScale = CONFIG.maxScale;
+      const fullW = el.gallery.clientWidth || window.innerWidth;
+      const maxRowPx = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--row-max')) || 220;
+
+      let row = [], sumAR = 0;
+      function flushRow(isLast=false){
+        if(!row.length) return;
+        const gaps = gap * (row.length - 1);
+        let rowH = Math.min((fullW - gaps) / sumAR, target * maxScale);
+        rowH = Math.min(rowH, maxRowPx);
+        if(isLast && rowH > target) rowH = target;
+
+        const rowEl = document.createElement("div");
+        rowEl.className = "row";
+        row.forEach(img=>{
+          const w = Math.round(img.ar * rowH);
+          const cell = document.createElement("div");
+          cell.className = "cell";
+          cell.style.width = w + "px";
+          cell.style.height = Math.round(rowH) + "px";
+          const tag = new Image();
+          tag.src = img.src; tag.alt = "";
+          tag.dataset.index = img.index;
+          tag.addEventListener("click", ()=> openLightbox(+tag.dataset.index));
+          cell.appendChild(tag);
+          rowEl.appendChild(cell);
+        });
+        el.gallery.appendChild(rowEl);
+        row = []; sumAR = 0;
+      }
+
+      metas.forEach(m=>{
+        row.push(m); sumAR += m.ar;
+        const projected = sumAR * target + gap * (row.length - 1);
+        if (projected >= fullW) flushRow(false);
+      });
+      flushRow(true);
+    }
+
+    function loadMetaWithTimeout(url, index, timeoutMs=5000){
+      return new Promise(resolve=>{
+        let settled = false;
+        const img = new Image();
+        const timer = setTimeout(()=>{
+          if (settled) return;
+          settled = true;
+          resolve({ src:url, w:3, h:2, ar:1.5, index }); // fallback AR prevents hang
+        }, timeoutMs);
+        img.onload = ()=>{
+          if (settled) return;
+          settled = true; clearTimeout(timer);
+          const w = img.naturalWidth || 3, h = img.naturalHeight || 2;
+          resolve({ src:url, w, h, ar: (w||3)/(h||2), index });
+        };
+        img.onerror = ()=>{
+          if (settled) return;
+          settled = true; clearTimeout(timer);
+          resolve({ src:url, w:3, h:2, ar:1.5, index });
+        };
+        img.src = url; // no lazy
+      });
+    }
+
+    async function renderJustifiedBatched(urls){
+      const total = urls.length;
+      metasGlobal = [];
+      el.bar.classList.remove("hidden"); el.bar.value = 0;
+      el.meta.textContent = `Measuring images 0/${total}…`;
+
+      const CONCURRENCY = 24; // limit parallel decodes
+      let next = 0, done = 0;
+
+      async function worker(){
+        while(next < total){
+          const idx = next++;
+          const meta = await loadMetaWithTimeout(urls[idx], idx, 6000);
+          metasGlobal[idx] = meta;
+          done++;
+          if (done % 16 === 0 || done === total){
+            el.bar.value = Math.round((done/total)*100);
+            el.meta.textContent = `Measuring images ${done}/${total}…`;
+            layout(metasGlobal.filter(Boolean));
+          }
+        }
+      }
+      await Promise.all(Array.from({length: CONCURRENCY}, worker));
+      el.bar.classList.add("hidden");
+      el.meta.textContent = `${total} image${total!==1?"s":""}`;
+      // final precise layout
+      layout(metasGlobal.filter(Boolean));
+    }
+
+    // ===== ZIP (Download All)
+    async function buildZip(urls){
+      const zip = new JSZip();
+      const folder = zip.folder(CONFIG.title.replace(/[^\w\-]+/g,"_")) || zip;
+      el.bar.classList.remove("hidden"); el.bar.value = 0;
+      let i=0;
+      for (const url of urls){
+        const name = decodeURIComponent(url.split("/").pop());
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(`Fetch failed: ${name}`);
+        folder.file(name, await res.blob());
+        i++; el.bar.value = Math.round((i/urls.length)*100);
+      }
+      const out = await zip.generateAsync({type:"blob"});
+      saveAs(out, `${CONFIG.title.replace(/[^\w\-]+/g,"_")}.zip`);
+      el.bar.classList.add("hidden");
+    }
+
+    // ===== Lightbox
+    let LB = { list:[], index:0, scale:1, tx:0, ty:0, dragging:false, startX:0, startY:0 };
+    function openLightbox(i){
+      LB.index = i; LB.scale = 1; LB.tx = 0; LB.ty = 0;
+      const src = LB.list[i];
+      const name = decodeURIComponent(src.split("/").pop());
+      el.lbImg.src = src;
+      el.lbTitle.textContent = name;
+      el.lbDownload.href = src;
+      el.lb.classList.add("open");
+      el.lbImg.style.transform = `translate(0px,0px) scale(1)`;
+      document.body.style.overflow = "hidden";
+    }
+    function closeLightbox(){ el.lb.classList.remove("open"); document.body.style.overflow = ""; }
+    function clampPan(){
+      const maxShift = 5000;
+      LB.tx = Math.max(-maxShift, Math.min(maxShift, LB.tx));
+      LB.ty = Math.max(-maxShift, Math.min(maxShift, LB.ty));
+      el.lbImg.style.transform = `translate(${LB.tx}px,${LB.ty}px) scale(${LB.scale})`;
+    }
+    function zoomAt(factor, cx, cy){
+      const prev = LB.scale;
+      LB.scale = Math.max(1, Math.min(8, LB.scale * factor));
+      const dx = cx - (window.innerWidth/2), dy = cy - (window.innerHeight/2);
+      LB.tx = (LB.tx - dx) * (LB.scale/prev) + dx;
+      LB.ty = (LB.ty - dy) * (LB.scale/prev) + dy;
+      clampPan();
+    }
+    el.lbClose.addEventListener("click", closeLightbox);
+    el.lb.addEventListener("click", (e)=>{ if(e.target === el.lb) closeLightbox(); });
+    el.lbPrev.addEventListener("click", ()=> openLightbox((LB.index-1+LB.list.length)%LB.list.length));
+    el.lbNext.addEventListener("click", ()=> openLightbox((LB.index+1)%LB.list.length));
+    el.lbZoomIn.addEventListener("click", (e)=>{ e.stopPropagation(); zoomAt(1.25, window.innerWidth/2, window.innerHeight/2); });
+    el.lbZoomOut.addEventListener("click", (e)=>{ e.stopPropagation(); zoomAt(1/1.25, window.innerWidth/2, window.innerHeight/2); });
+    el.lbReset.addEventListener("click", (e)=>{ e.stopPropagation(); LB.scale=1; LB.tx=0; LB.ty=0; clampPan(); });
+    el.lbStage.addEventListener("wheel", (e)=>{ e.preventDefault(); zoomAt(e.deltaY<0?1.2:1/1.2, e.clientX, e.clientY); }, {passive:false});
+    el.lbStage.addEventListener("pointerdown",(e)=>{ if(!el.lb.classList.contains("open")) return; LB.dragging=true; LB.startX=e.clientX-LB.tx; LB.startY=e.clientY-LB.ty; el.lbStage.setPointerCapture(e.pointerId); });
+    el.lbStage.addEventListener("pointermove",(e)=>{ if(!LB.dragging) return; LB.tx=e.clientX-LB.startX; LB.ty=e.clientY-LB.startY; clampPan(); });
+    el.lbStage.addEventListener("pointerup",(e)=>{ LB.dragging=false; el.lbStage.releasePointerCapture(e.pointerId); });
+    window.addEventListener("keydown",(e)=>{
+      if(!el.lb.classList.contains("open")) return;
+      if(e.key==="Escape") closeLightbox();
+      else if(e.key==="ArrowLeft") el.lbPrev.click();
+      else if(e.key==="ArrowRight") el.lbNext.click();
+      else if(e.key==="+"||e.key==="=") el.lbZoomIn.click();
+      else if(e.key==="-"||e.key==="_") el.lbZoomOut.click();
+      else if(e.key.toLowerCase()==="d") el.lbDownload.click();
+    });
+    el.lbStage.addEventListener("dblclick",(e)=> zoomAt(LB.scale===1?2:1/2, e.clientX, e.clientY));
+
+    // ===== Boot
+    (async function init(){
+      try{
+        const keys = await listAllKeys(CONFIG.prefix);
+        const urls = keys.map(keyToUrl);
+        if (!urls.length) { el.meta.textContent = "No images found in this delivery."; return; }
+        el.meta.textContent = `Found ${urls.length} images…`;
+        // Progressive build (won't hang on a few slow files)
+        await renderJustifiedBatched(urls);
+        LB.list = urls;
+
+        el.btn.disabled = false;
+        el.btn.addEventListener("click", async ()=>{
+          el.btn.disabled = true; el.btn.textContent = "Preparing…";
+          try { await buildZip(urls); } catch (e) { alert(e.message || "ZIP failed"); }
+          el.btn.textContent = "Download All"; el.btn.disabled = false;
+        });
+      }catch(e){
+        console.error(e);
+        el.meta.textContent = `Error: ${e.message}`;
+      }
+    })();
+  </script>
+</body>
+</html>

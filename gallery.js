@@ -1,84 +1,131 @@
-// shared/gallery.js
+// gallery.js
 
-const IMAGES_PER_PAGE = 500;
-let keys = [];
-let currentPage = 1;
+const IMAGES_PER_PAGE = 60;
+let keys         = [];
+let currentPage  = 1;
 let galleryInstance;
+let isRendering  = false;
 
-function loadGallery(prefix, bucket="pateltales-photography") {
-  const gallery = document.getElementById("gallery");
-  const pagination = document.getElementById("pagination");
-  gallery.innerHTML = "Loading photos...";
-  pagination.style.display = "none";
-  fetch(`https://${bucket}.s3.us-east-2.amazonaws.com?list-type=2&prefix=${prefix}`)
-    .then(res => res.text())
-    .then(text => {
-      const parser = new DOMParser();
-      const xmlDoc = parser.parseFromString(text, "application/xml");
+// ── Skeleton ──────────────────────────────────────────────────
+function buildSkeleton(count) {
+    return Array(count).fill('<div class="skeleton-item"></div>').join('');
+}
 
-      keys = Array.from(xmlDoc.getElementsByTagName("Key"))
-        .map(k => k.textContent)
-        .filter(key => key.match(/\.(jpe?g|png|gif)$/i) && !key.endsWith("/"));
+// ── Pagination helpers ────────────────────────────────────────
+function setPaginationVisible(visible) {
+    const display = visible ? 'flex' : 'none';
+    document.getElementById('pagination-top').style.display    = display;
+    document.getElementById('pagination-bottom').style.display = display;
+}
 
-      if (keys.length === 0) {
-        gallery.innerHTML = "<p>No photos found.</p>";
-        return;
-      }
-
-      currentPage = 1;
-      pagination.style.display = "flex";
-      renderPage(bucket);
-    })
-    .catch(err => {
-      console.error(err);
-      gallery.innerHTML = "<p>Error loading photos.</p>";
+function setPaginationButtons() {
+    const atStart = currentPage === 1;
+    const atEnd   = (currentPage * IMAGES_PER_PAGE) >= keys.length;
+    ['top', 'bottom'].forEach(pos => {
+        document.getElementById(`prevBtn-${pos}`).disabled = atStart;
+        document.getElementById(`nextBtn-${pos}`).disabled = atEnd;
     });
 }
 
-function renderPage(bucket="pateltales-photography") {
-  const gallery = document.getElementById("gallery");
-  gallery.innerHTML = "";
+// ── Load ──────────────────────────────────────────────────────
+function loadGallery(prefix, bucket = 'pateltales-photography') {
+    const gallery = document.getElementById('gallery');
+    gallery.innerHTML = buildSkeleton(12);
+    setPaginationVisible(false);
 
-  const startIndex = (currentPage - 1) * IMAGES_PER_PAGE;
-  const endIndex = Math.min(startIndex + IMAGES_PER_PAGE, keys.length);
-  const pageKeys = keys.slice(startIndex, endIndex);
+    fetch(`https://${bucket}.s3.us-east-2.amazonaws.com?list-type=2&prefix=${prefix}`)
+        .then(res => res.text())
+        .then(text => {
+            const xml = new DOMParser().parseFromString(text, 'application/xml');
+            keys = Array.from(xml.getElementsByTagName('Key'))
+                .map(k => k.textContent)
+                .filter(k => k.match(/\.(jpe?g|png|gif)$/i) && !k.endsWith('/'));
 
-  pageKeys.forEach(key => {
-    const url = `https://${bucket}.s3.us-east-2.amazonaws.com/${key}`;
-    const a = document.createElement("a");
-    a.href = url;
-    a.setAttribute("data-lg-size", "1600-1067");
-    a.setAttribute("data-sub-html", `<h4>${key.split("/").pop()}</h4>`);
-    const img = document.createElement("img");
-    img.src = url;
-    img.alt = key.split("/").pop();
-    // img.loading = "lazy";
-    a.appendChild(img);
-    gallery.appendChild(a);
-  });
+            if (keys.length === 0) {
+                gallery.innerHTML = '<p class="gallery-empty">No photos found.</p>';
+                return;
+            }
 
-  if (galleryInstance) galleryInstance.destroy();
-  galleryInstance = lightGallery(gallery, {
-    plugins: [lgZoom],
-    speed: 300,
-  });
-
-  document.getElementById("prevBtn").disabled = currentPage === 1;
-  document.getElementById("nextBtn").disabled = endIndex >= keys.length;
+            currentPage = 1;
+            renderPage(bucket);
+        })
+        .catch(err => {
+            console.error(err);
+            document.getElementById('gallery').innerHTML = '<p class="gallery-empty">Error loading photos.</p>';
+        });
 }
 
-document.getElementById("prevBtn").addEventListener("click", () => {
-  if (currentPage > 1) {
-    currentPage--;
-    renderPage();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-});
+// ── Render ────────────────────────────────────────────────────
+function renderPage(bucket = 'pateltales-photography') {
+    if (isRendering) return;
+    isRendering = true;
 
-document.getElementById("nextBtn").addEventListener("click", () => {
-  if ((currentPage * IMAGES_PER_PAGE) < keys.length) {
-    currentPage++;
-    renderPage();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
+    const gallery  = document.getElementById('gallery');
+    const start    = (currentPage - 1) * IMAGES_PER_PAGE;
+    const end      = Math.min(start + IMAGES_PER_PAGE, keys.length);
+    const pageKeys = keys.slice(start, end);
+
+    // Show skeleton while images load
+    gallery.innerHTML = buildSkeleton(pageKeys.length);
+
+    // Build DOM off-screen with DocumentFragment
+    const fragment = document.createDocumentFragment();
+    pageKeys.forEach((key, i) => {
+        const filename = key.split('/').pop();
+        const url      = `https://${bucket}.s3.us-east-2.amazonaws.com/${key}`;
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.setAttribute('data-lg-size', '1600-1067');
+        a.setAttribute('data-sub-html', `<h4>${filename}</h4>`);
+        a.setAttribute('data-download-url', url);
+
+        const img      = document.createElement('img');
+        img.src        = url;
+        img.alt        = filename;
+        img.loading    = i < 12 ? 'eager' : 'lazy'; // eagerly load first row
+        img.decoding   = 'async';
+
+        a.appendChild(img);
+        fragment.appendChild(a);
+    });
+
+    // Single DOM swap
+    gallery.innerHTML = '';
+    gallery.appendChild(fragment);
+
+    // Re-init lightGallery
+    if (galleryInstance) galleryInstance.destroy();
+    galleryInstance = lightGallery(gallery, {
+        plugins:       [lgZoom, lgThumbnail],
+        speed:         250,
+        preload:       2,
+        download:      true,
+        thumbnail:     true,
+        animateThumb:  true,
+        thumbWidth:    100,
+        thumbHeight:   '80px',
+        zoomFromOrigin: true,
+    });
+
+    setPaginationVisible(keys.length > IMAGES_PER_PAGE);
+    setPaginationButtons();
+    isRendering = false;
+}
+
+// ── Pagination buttons ────────────────────────────────────────
+['top', 'bottom'].forEach(pos => {
+    document.getElementById(`prevBtn-${pos}`).addEventListener('click', () => {
+        if (isRendering || currentPage <= 1) return;
+        currentPage--;
+        renderPage();
+        window.scrollTo({ top: 0, behavior: 'instant' });
+    });
+
+    document.getElementById(`nextBtn-${pos}`).addEventListener('click', () => {
+        if (isRendering || (currentPage * IMAGES_PER_PAGE) >= keys.length) return;
+        currentPage++;
+        renderPage();
+        window.scrollTo({ top: 0, behavior: 'instant' });
+    });
 });

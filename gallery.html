@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VB4MGSEDXR"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-VB4MGSEDXR');
+    </script>
+    <link rel="icon" href="pateltales_logo.png" type="image/png" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Gallery — PatelTales Photography</title>
+
+    <!-- Preconnect to speed up external resource fetches -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://pateltales-photography.s3.us-east-2.amazonaws.com" />
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/css/lightgallery-bundle.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="gallery.css" />
+</head>
+
+<body>
+    <nav class="nav">
+        <a class="nav-logo" href="index.html">
+            <img src="pateltales_logo.png" alt="PatelTales" />
+        </a>
+        <div class="nav-links">
+            <a href="galleries.html?tab=ana">ANA Track Coaching</a>
+            <a href="galleries.html?tab=orca">Orca Running</a>
+            <a href="galleries.html?tab=general">Gallery</a>
+            <a href="podcast.html">Podcast</a>
+        </div>
+    </nav>
+
+    <h1 class="gallery-title" id="gallery-title">Loading…</h1>
+
+    <div class="pagination" id="pagination-top" style="display:none;">
+        <button id="prevBtn-top"  disabled>Previous</button>
+        <button id="nextBtn-top"  disabled>Next</button>
+    </div>
+
+    <div id="gallery">Loading photos…</div>
+
+    <div class="pagination" id="pagination-bottom" style="display:none;">
+        <button id="prevBtn-bottom" disabled>Previous</button>
+        <button id="nextBtn-bottom" disabled>Next</button>
+    </div>
+
+    <footer class="gallery-footer">
+        <p>&copy; 2026 PatelTales</p>
+        <div class="social-links">
+            <a href="https://instagram.com/pateltales_photography" target="_blank" title="Instagram">
+                <i class="fab fa-instagram"></i></a>
+            <a href="https://x.com/pateltales" target="_blank" title="X">
+                <i class="fab fa-twitter"></i></a>
+            <a href="mailto:pateltalesconnect@gmail.com" title="Email">
+                <i class="fas fa-envelope"></i></a>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/lightgallery.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/plugins/zoom/lg-zoom.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/plugins/thumbnail/lg-thumbnail.umd.min.js"></script>
+    <script src="galleries-data.js"></script>
+    <script src="gallery.js"></script>
+    <script>
+        const params  = new URLSearchParams(window.location.search);
+        const id      = params.get('id');
+        const gallery = GALLERIES.find(g => g.id === id);
+
+        if (gallery) {
+            document.title = gallery.title + ' — PatelTales Photography';
+            document.getElementById('gallery-title').textContent = gallery.title;
+            loadGallery(id + '/');
+        } else {
+            document.getElementById('gallery-title').textContent = 'Gallery not found';
+            document.getElementById('gallery').innerHTML = '<p>Sorry, this gallery does not exist.</p>';
+        }
+    </script>
+</body>
+
+</html>

@@ -13,7 +13,7 @@
     <link rel="icon" href="pateltales_logo.png" type="image/png" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>PatelTales Photography</title>
+    <title>Galleries — PatelTales Photography</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
@@ -54,49 +54,73 @@
 
         .nav-links {
             display: flex;
-            gap: 24px;
+            gap: 32px;
             align-items: center;
         }
 
         .nav-links a {
-            font-size: 0.72rem;
+            font-size: 0.75rem;
             font-weight: 500;
-            letter-spacing: 1.2px;
+            letter-spacing: 1.8px;
             text-transform: uppercase;
             color: #1a1a1a;
             transition: color 0.2s;
         }
 
         .nav-links a:hover { color: #999; }
+        .nav-links a.active { border-bottom: 1.5px solid #1a1a1a; padding-bottom: 2px; }
 
-        /* ── Masonry Grid ── */
-        .masonry-wrap {
-            padding-top: 61px; /* nav height */
+        /* ── Page ── */
+        .page {
+            padding: 100px 36px 70px;
+            max-width: 1280px;
+            margin: 0 auto;
         }
 
-        .masonry {
-            columns: 3 280px;
-            column-gap: 3px;
-            padding: 3px;
+        /* ── Gallery Grid ── */
+        .gallery-section { display: none; }
+        .gallery-section.active { display: block; }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 14px;
         }
 
-        .masonry-item {
-            break-inside: avoid;
-            margin-bottom: 3px;
-            overflow: hidden;
-            cursor: default;
-        }
-
-        .masonry-item img {
-            width: 100%;
+        .event {
+            position: relative;
             display: block;
-            transition: transform 0.6s ease, filter 0.4s ease;
+            overflow: hidden;
+            border-radius: 6px;
+            aspect-ratio: 3 / 2;
+            background: #f2f2f2;
         }
 
-        .masonry-item:hover img {
-            transform: scale(1.03);
-            filter: brightness(1.04);
+        .event img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s ease;
         }
+
+        .event-title {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 40px 16px 14px;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.62));
+            color: #fff;
+            font-size: 0.82rem;
+            font-weight: 500;
+            opacity: 0;
+            transform: translateY(4px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .event:hover img { transform: scale(1.04); }
+        .event:hover .event-title { opacity: 1; transform: translateY(0); }
 
         /* ── Footer ── */
         footer {
@@ -123,7 +147,12 @@
         @media (max-width: 600px) {
             .nav { padding: 12px 20px; }
             .nav-links { gap: 18px; }
-            .masonry { columns: 2 160px; }
+            .page { padding: 90px 16px 50px; }
+            .gallery-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+        }
+
+        @media (max-width: 420px) {
+            .gallery-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -135,7 +164,7 @@
         <a class="nav-logo" href="index.html">
             <img src="pateltales_logo.png" alt="PatelTales" />
         </a>
-        <div class="nav-links">
+        <div class="nav-links" id="nav-links">
             <a href="galleries.html?tab=ana">ANA Track Coaching</a>
             <a href="galleries.html?tab=orca">Orca Running</a>
             <a href="galleries.html?tab=general">Gallery</a>
@@ -143,11 +172,12 @@
         </div>
     </nav>
 
-    <!-- Mosaic -->
-    <div class="masonry-wrap">
-        <div class="masonry" id="masonry">
-            <!-- Injected from featured.js -->
-        </div>
+    <!-- Galleries -->
+    <div class="page">
+        <!-- One grid per category, built by JS -->
+        <div class="gallery-section active" id="section-ana"></div>
+        <div class="gallery-section" id="section-orca"></div>
+        <div class="gallery-section" id="section-general"></div>
     </div>
 
     <!-- Footer -->
@@ -163,34 +193,42 @@
         </div>
     </footer>
 
-    <script src="featured.js"></script>
+    <script src="galleries-data.js"></script>
     <script>
-        const grid = document.getElementById('masonry');
+        // Read ?tab= from URL, default to first tab
+        const urlTab = new URLSearchParams(window.location.search).get('tab') || TABS[0].id;
 
-        fetch(`${S3_BASE}?list-type=2&prefix=${FEATURED_FOLDER}/`)
-            .then(res => res.text())
-            .then(text => {
-                const xml   = new DOMParser().parseFromString(text, 'application/xml');
-                const keys  = Array.from(xml.getElementsByTagName('Key'))
-                    .map(k => k.textContent)
-                    .filter(k => k.match(/\.(jpe?g|png)$/i));
+        // Activate the correct section
+        document.querySelectorAll('.gallery-section').forEach(s => s.classList.remove('active'));
+        const activeSection = document.getElementById(`section-${urlTab}`);
+        if (activeSection) activeSection.classList.add('active');
 
-                // Shuffle so order is different every visit
-                for (let i = keys.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [keys[i], keys[j]] = [keys[j], keys[i]];
-                }
+        // Highlight the matching nav link
+        document.querySelectorAll('#nav-links a').forEach(a => {
+            a.classList.toggle('active', a.href.includes(`tab=${urlTab}`));
+        });
 
-                keys.forEach(key => {
-                    const item = document.createElement('div');
-                    item.className = 'masonry-item';
-                    item.innerHTML = `<img src="${S3_BASE}/${key}" alt="" loading="lazy" />`;
-                    grid.appendChild(item);
-                });
-            })
-            .catch(() => {
-                grid.innerHTML = '<p style="padding:40px;color:#aaa;">Could not load photos.</p>';
-            });
+        // Build gallery grids from data
+        GALLERIES.forEach(g => {
+            const section = document.getElementById(`section-${g.category}`);
+            if (!section) return;
+
+            // Create grid inside section if it doesn't exist yet
+            let grid = section.querySelector('.gallery-grid');
+            if (!grid) {
+                grid = document.createElement('div');
+                grid.className = 'gallery-grid';
+                section.appendChild(grid);
+            }
+
+            const a = document.createElement('a');
+            a.className = 'event';
+            a.href = `gallery.html?id=${g.id}`;
+            a.innerHTML = `
+                <img src="${S3_BASE}/${g.id}/${g.cover}" alt="${g.title}" loading="lazy" />
+                <div class="event-title">${g.title}</div>`;
+            grid.appendChild(a);
+        });
     </script>
 
 </body>
