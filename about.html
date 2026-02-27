@@ -42,13 +42,28 @@
             align-items: center;
             justify-content: space-between;
             padding: 14px 36px;
-            background: rgba(255, 255, 255, 0.92);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            background: rgba(255, 255, 255, 0);
+            border-bottom: 1px solid rgba(255, 255, 255, 0);
+            transition: background 0.4s ease, border-color 0.4s ease,
+                        box-shadow 0.4s ease, backdrop-filter 0.4s ease;
         }
 
-        .nav-logo img { height: 32px; display: block; }
+        .nav.scrolled {
+            background: rgba(255, 255, 255, 0.93);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            box-shadow: 0 1px 24px rgba(0, 0, 0, 0.06);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+
+        .nav-logo img {
+            height: 32px;
+            display: block;
+            filter: invert(1) brightness(2);
+            transition: filter 0.4s ease;
+        }
+
+        .nav.scrolled .nav-logo img { filter: none; }
 
         .nav-links {
             display: flex;
@@ -57,19 +72,23 @@
         }
 
         .nav-links a {
-            font-size: 0.72rem;
+            font-size: 0.75rem;
             font-weight: 500;
             letter-spacing: 1.8px;
             text-transform: uppercase;
-            color: #1a1a1a;
-            transition: color 0.2s;
+            color: rgba(255, 255, 255, 0.88);
+            text-shadow: 0 1px 6px rgba(0, 0, 0, 0.4);
+            transition: color 0.4s, text-shadow 0.4s, opacity 0.2s;
         }
 
-        .nav-links a:hover { color: #999; }
-        .nav-links a.active {
-            border-bottom: 1.5px solid #1a1a1a;
-            padding-bottom: 2px;
+        .nav.scrolled .nav-links a {
+            color: #1a1a1a;
+            text-shadow: none;
         }
+
+        .nav-links a:hover { opacity: 0.6; }
+
+        .nav-links a.active { border-bottom: 1.5px solid currentColor; padding-bottom: 2px; }
 
         /* ── Hamburger ── */
         .nav-toggle {
@@ -87,20 +106,75 @@
             display: block;
             width: 22px;
             height: 2px;
-            background: #1a1a1a;
+            background: rgba(255, 255, 255, 0.9);
             border-radius: 2px;
-            transition: all 0.25s;
+            transition: background 0.4s;
+        }
+        .nav.scrolled .nav-toggle span { background: #1a1a1a; }
+
+        /* ── Hero ── */
+        .about-hero {
+            position: relative;
+            width: 100%;
+            height: 46vh;
+            min-height: 280px;
+            background: url('DSC05422.jpg') center 42% / cover no-repeat;
+            display: flex;
+            align-items: flex-end;
         }
 
-        /* ── Split layout ── */
+        .about-hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to bottom,
+                rgba(0,0,0,0.06) 0%,
+                rgba(0,0,0,0.14) 50%,
+                rgba(0,0,0,0.72) 100%
+            );
+        }
+
+        .about-hero-content {
+            position: relative;
+            z-index: 1;
+            padding: 0 56px 56px;
+            color: #fff;
+        }
+
+        .about-hero-eyebrow {
+            display: block;
+            font-size: 0.62rem;
+            font-weight: 400;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.65);
+            margin: 0 0 14px;
+        }
+
+        .about-hero h1 {
+            font-size: clamp(2.8rem, 6vw, 5.5rem);
+            font-weight: 600;
+            letter-spacing: -1px;
+            line-height: 1.0;
+            margin: 0 0 14px;
+        }
+
+        .about-hero-sub {
+            font-size: 0.72rem;
+            font-weight: 300;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.65);
+            margin: 0;
+        }
+
+        /* ── Split layout below hero ── */
         .about-wrap {
             display: grid;
             grid-template-columns: 44% 1fr;
-            margin-top: 61px;
-            min-height: calc(100vh - 61px);
+            min-height: calc(100vh - 46vh);
         }
 
-        /* ── Left: sticky photo ── */
         .about-photo {
             position: sticky;
             top: 61px;
@@ -112,37 +186,16 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            object-position: center 18%;
+            object-position: center 20%;
             display: block;
         }
 
-        /* ── Right: text ── */
-        .about-text {
+        /* ── Bio section ── */
+        .about-body {
+            padding: 80px 72px 80px 68px;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            padding: 80px 72px 80px 68px;
-        }
-
-        /* Eyebrow */
-        .eyebrow {
-            display: block;
-            font-size: 0.62rem;
-            font-weight: 500;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            color: #aaa;
-            margin: 0 0 20px;
-        }
-
-        /* Name */
-        .about-name {
-            font-size: clamp(2.8rem, 4.2vw, 4.4rem);
-            font-weight: 600;
-            line-height: 1.0;
-            letter-spacing: -1.5px;
-            color: #1a1a1a;
-            margin: 0 0 28px;
         }
 
         /* Genre pills */
@@ -150,7 +203,7 @@
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
-            margin-bottom: 36px;
+            margin-bottom: 48px;
         }
 
         .genre-pills span {
@@ -170,11 +223,11 @@
             width: 36px;
             height: 1.5px;
             background: #1a1a1a;
-            margin: 0 0 36px;
+            margin: 0 0 40px;
         }
 
         /* Bio */
-        .bio { margin: 0 0 44px; }
+        .bio { margin: 0 0 52px; }
 
         .bio .lead {
             font-size: 1.08rem;
@@ -194,7 +247,6 @@
 
         .bio p:last-child { margin-bottom: 0; }
 
-        /* Timeline markers inside text */
         .bio .year {
             font-size: 0.62rem;
             font-weight: 600;
@@ -229,16 +281,6 @@
         .about-social a:hover { color: #1a1a1a; }
         .about-social a i { font-size: 1rem; }
 
-        /* Fade-in animation for text column */
-        .about-text {
-            animation: textFadeIn 0.8s ease both;
-        }
-
-        @keyframes textFadeIn {
-            from { opacity: 0; transform: translateY(18px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-
         /* ── Footer ── */
         footer {
             background: #fafafa;
@@ -261,12 +303,7 @@
         .social-links a:hover { color: #1a1a1a; }
 
         /* ── Responsive ── */
-        @media (max-width: 900px) {
-            .about-text { padding: 64px 48px 64px 48px; }
-        }
-
         @media (max-width: 700px) {
-            /* Hamburger nav */
             .nav { padding: 12px 20px; }
             .nav-toggle { display: flex; }
             .nav-links {
@@ -285,13 +322,17 @@
                 z-index: 99;
             }
             .nav-links.open { display: flex; }
-            .nav-links a { font-size: 0.78rem; letter-spacing: 1.6px; }
-
-            /* Stack on mobile */
-            .about-wrap {
-                grid-template-columns: 1fr;
-                margin-top: 61px;
+            .nav-links a {
+                font-size: 0.78rem;
+                letter-spacing: 1.6px;
+                color: #1a1a1a;
+                text-shadow: none;
             }
+
+            .about-hero { height: 40vh; min-height: 240px; }
+            .about-hero-content { padding: 0 28px 44px; }
+
+            .about-wrap { grid-template-columns: 1fr; }
 
             .about-photo {
                 position: relative;
@@ -301,22 +342,9 @@
                 max-height: 440px;
             }
 
-            /* On mobile, crop even tighter to face */
-            .about-photo img {
-                object-position: center 12%;
-            }
+            .about-body { padding: 48px 28px 64px; justify-content: flex-start; }
 
-            .about-text {
-                padding: 48px 28px 64px;
-                animation: none;
-            }
-
-            .about-name { letter-spacing: -1px; }
-
-            .about-social {
-                flex-wrap: wrap;
-                gap: 18px;
-            }
+            .about-social { flex-wrap: wrap; gap: 18px; }
         }
     </style>
 </head>
@@ -324,7 +352,7 @@
 <body>
 
     <!-- Nav -->
-    <nav class="nav">
+    <nav class="nav" id="main-nav">
         <a class="nav-logo" href="index.html">
             <img src="pateltales_logo.png" alt="PatelTales" />
         </a>
@@ -341,64 +369,75 @@
         </div>
     </nav>
 
-    <!-- Split layout -->
+    <!-- Hero -->
+    <div class="about-hero">
+        <div class="about-hero-overlay"></div>
+        <div class="about-hero-content">
+            <span class="about-hero-eyebrow">PatelTales Photography</span>
+            <h1>Shubham<br>Patel</h1>
+            <p class="about-hero-sub">Photographer &nbsp;·&nbsp; Storyteller</p>
+        </div>
+    </div>
+
+    <!-- Split: photo left, bio right -->
     <div class="about-wrap">
 
-        <!-- Left: photo, sticky, cropped to face -->
         <aside class="about-photo">
-            <img src="bg.jpg" alt="Shubham Patel" />
+            <img src="about-running.jpg" alt="Shubham Patel running" />
         </aside>
 
-        <!-- Right: scrollable text -->
-        <section class="about-text">
+    <!-- Bio -->
+    <div class="about-body">
 
-            <span class="eyebrow">PatelTales Photography</span>
+        <div class="genre-pills">
+            <span>Race Photography</span>
+            <span>Weddings</span>
+            <span>Portraits</span>
+            <span>2024 — Present</span>
+        </div>
 
-            <h1 class="about-name">Shubham<br>Patel</h1>
+        <div class="rule"></div>
 
-            <div class="genre-pills">
-                <span>Race Photography</span>
-                <span>Weddings</span>
-                <span>Portraits</span>
-                <span>2024 — Present</span>
-            </div>
+        <div class="bio">
+            <p class="lead">
+                Photography has always been something that attracted me — ever since I held that first old-school film camera.
+            </p>
 
-            <div class="rule"></div>
+            <p>
+                <span class="year">The beginning</span>
+                It started simply: a film camera, then a phone camera — the slow, natural progression of anyone who falls in love with a lens. In 2022, I took the leap and picked up a mirrorless camera. And then promptly let it sit there. Fear and hesitation have a funny way of keeping you from the things you actually love.
+            </p>
 
-            <div class="bio">
-                <p class="lead">
-                    Photography has always been something that attracted me — ever since I held that first old-school film camera.
-                </p>
+            <p>
+                <span class="year">2024 — Everything changed</span>
+                Finally, I gave it a real chance. Since then I've thrown myself into all of it — the energy of race days, the emotion of weddings, the quiet intimacy of portraits, and the joy of just making fun, unguarded pictures of friends. Every setting, every subject teaches me something new.
+            </p>
 
-                <p>
-                    <span class="year">The beginning</span>
-                    It started simply: a film camera, then a phone camera — the slow, natural progression of anyone who falls in love with a lens. In 2022, I took the leap and picked up a mirrorless camera. And then promptly let it sit there. Fear and hesitation have a funny way of keeping you from the things you actually love.
-                </p>
+            <p>
+                This site is two things: a home for the work I'm most proud of, and a central place for everyone I've photographed to find and download their pictures. If you're here looking for a photo — it's here for you.
+            </p>
 
-                <p>
-                    <span class="year">2024 — Everything changed</span>
-                    Finally, I gave it a real chance. Since then I've thrown myself into all of it — the energy of race days, the emotion of weddings, the quiet intimacy of portraits, and the joy of just making fun, unguarded pictures of friends. Every setting, every subject teaches me something new.
-                </p>
+            <p>
+                <span class="year">What's next</span>
+                Still frames are one thing — but storytelling through video is something I feel just as pulled toward. It's a bigger undertaking, a steeper learning curve, and honestly a whole different craft. I'm on my way. Stay tuned for the YouTube channel (<a href="https://youtube.com/@pateltales" target="_blank" style="color:#999; text-decoration:underline;">@pateltales</a>) and the <a href="podcast.html" style="color:#999; text-decoration:underline;">Podcast</a> section right here on the site.
+            </p>
+        </div>
 
-                <p>
-                    This site is two things: a home for the work I'm most proud of, and a central place for everyone I've photographed to find and download their pictures. If you're here looking for a photo — it's here for you.
-                </p>
-            </div>
+        <div class="about-social">
+            <a href="https://instagram.com/pateltales_photography" target="_blank">
+                <i class="fab fa-instagram"></i> Instagram
+            </a>
+            <a href="https://x.com/pateltales" target="_blank">
+                <i class="fab fa-twitter"></i> X
+            </a>
+            <a href="mailto:pateltalesconnect@gmail.com">
+                <i class="fas fa-envelope"></i> Email
+            </a>
+        </div>
 
-            <div class="about-social">
-                <a href="https://instagram.com/pateltales_photography" target="_blank" title="Instagram">
-                    <i class="fab fa-instagram"></i> Instagram
-                </a>
-                <a href="https://x.com/pateltales" target="_blank" title="X">
-                    <i class="fab fa-twitter"></i> X
-                </a>
-                <a href="mailto:pateltalesconnect@gmail.com" title="Email">
-                    <i class="fas fa-envelope"></i> Email
-                </a>
-            </div>
+    </div><!-- end about-body -->
 
-        </section>
-    </div>
+    </div><!-- end about-wrap -->
 
     <!-- Footer -->
     <footer>
@@ -417,6 +456,11 @@
         document.getElementById('nav-toggle').addEventListener('click', function () {
             document.getElementById('nav-links').classList.toggle('open');
         });
+
+        const nav = document.getElementById('main-nav');
+        window.addEventListener('scroll', function () {
+            nav.classList.toggle('scrolled', window.scrollY > 20);
+        }, { passive: true });
     </script>
 
 </body>

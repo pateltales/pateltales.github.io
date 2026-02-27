@@ -41,15 +41,30 @@
             align-items: center;
             justify-content: space-between;
             padding: 14px 36px;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0);
+            border-bottom: 1px solid rgba(255, 255, 255, 0);
+            transition: background 0.4s ease, border-color 0.4s ease,
+                        box-shadow 0.4s ease, backdrop-filter 0.4s ease;
+        }
+
+        .nav.scrolled {
+            background: rgba(255, 255, 255, 0.93);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            box-shadow: 0 1px 24px rgba(0, 0, 0, 0.06);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
         }
 
         .nav-logo img {
             height: 32px;
             display: block;
+            /* White logo over hero photos */
+            filter: invert(1) brightness(2);
+            transition: filter 0.4s ease;
+        }
+
+        .nav.scrolled .nav-logo img {
+            filter: none;
         }
 
         .nav-links {
@@ -63,25 +78,43 @@
             font-weight: 500;
             letter-spacing: 1.8px;
             text-transform: uppercase;
-            color: #1a1a1a;
-            transition: color 0.2s;
+            color: rgba(255, 255, 255, 0.88);
+            text-shadow: 0 1px 6px rgba(0, 0, 0, 0.4);
+            transition: color 0.4s, text-shadow 0.4s, opacity 0.2s;
         }
 
-        .nav-links a:hover { color: #999; }
-        .nav-links a.active { border-bottom: 1.5px solid #1a1a1a; padding-bottom: 2px; }
+        .nav.scrolled .nav-links a {
+            color: #1a1a1a;
+            text-shadow: none;
+        }
 
-        /* ── ANA Hero banner ── */
+        .nav-links a:hover { opacity: 0.6; }
+        .nav-links a.active { border-bottom: 1.5px solid currentColor; padding-bottom: 2px; }
+
+        /* ── Hero banners ── */
         .section-hero {
             position: relative;
             width: 100%;
             height: 72vh;
             min-height: 400px;
-            margin-top: 61px; /* clear fixed nav */
-            background:
-                url('https://pateltales-photography.s3.us-east-2.amazonaws.com/ana-track-080625/DSC08700.jpg')
-                center / cover no-repeat;
             display: flex;
             align-items: flex-end;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        #ana-hero {
+            background-image: url('https://pateltales-photography.s3.us-east-2.amazonaws.com/ana-track-080625/DSC08700.jpg');
+        }
+
+        #orca-hero {
+            background-image: url('https://pateltales-photography.s3.us-east-2.amazonaws.com/iron-horse-2025/3-DSC04562.jpg');
+        }
+
+        #general-hero {
+            background-image: url('https://pateltales-photography.s3.us-east-2.amazonaws.com/gaga-graduation/DSC06554.jpg');
+            background-position: center 40%;
         }
 
         .section-hero-overlay {
@@ -129,16 +162,9 @@
             margin: 0;
         }
 
-        /* ── Page ── */
+        /* ── Page content ── */
         .page {
-            padding: 100px 36px 70px;
-            max-width: 1280px;
-            margin: 0 auto;
-        }
-
-        /* Less top padding when a hero sits above */
-        .page.with-hero {
-            padding-top: 44px;
+            padding: 32px 3px 70px;
         }
 
         /* ── Gallery Grid ── */
@@ -147,15 +173,14 @@
 
         .gallery-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 14px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 3px;
         }
 
         .event {
             position: relative;
             display: block;
             overflow: hidden;
-            border-radius: 6px;
             aspect-ratio: 3 / 2;
             background: #f2f2f2;
         }
@@ -168,23 +193,24 @@
             transition: transform 0.5s ease;
         }
 
-        .event-title {
+        .event-overlay {
             position: absolute;
             bottom: 0;
             left: 0;
             right: 0;
-            padding: 40px 16px 14px;
+            padding: 48px 20px 18px;
             background: linear-gradient(transparent, rgba(0, 0, 0, 0.62));
-            color: #fff;
-            font-size: 0.82rem;
-            font-weight: 500;
-            opacity: 0;
-            transform: translateY(4px);
-            transition: opacity 0.3s ease, transform 0.3s ease;
         }
 
-        .event:hover img { transform: scale(1.04); }
-        .event:hover .event-title { opacity: 1; transform: translateY(0); }
+        .event-title {
+            color: #fff;
+            font-size: 0.88rem;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            margin: 0;
+        }
+
+        .event:hover img { transform: scale(1.06); }
 
         /* ── Footer ── */
         footer {
@@ -223,19 +249,18 @@
             display: block;
             width: 22px;
             height: 2px;
-            background: #1a1a1a;
+            background: rgba(255, 255, 255, 0.9);
             border-radius: 2px;
-            transition: all 0.25s;
+            transition: background 0.4s;
         }
+        .nav.scrolled .nav-toggle span { background: #1a1a1a; }
 
         /* ── Responsive ── */
         @media (max-width: 700px) {
             .nav { padding: 12px 20px; }
-            .page { padding: 90px 16px 50px; }
-            .page.with-hero { padding-top: 32px; }
-            .gallery-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
             .section-hero { height: 56vw; min-height: 280px; }
             .section-hero-content { padding: 0 24px 36px; }
+            .general-header { padding: 56px 24px 36px; }
             .nav-toggle { display: flex; }
             .nav-links {
                 display: none;
@@ -253,10 +278,15 @@
                 z-index: 99;
             }
             .nav-links.open { display: flex; }
-            .nav-links a { font-size: 0.78rem; letter-spacing: 1.6px; }
+            .nav-links a {
+                font-size: 0.78rem;
+                letter-spacing: 1.6px;
+                color: #1a1a1a;
+                text-shadow: none;
+            }
         }
 
-        @media (max-width: 420px) {
+        @media (max-width: 600px) {
             .gallery-grid { grid-template-columns: 1fr; }
         }
     </style>
@@ -265,7 +295,7 @@
 <body>
 
     <!-- Nav -->
-    <nav class="nav">
+    <nav class="nav" id="main-nav">
         <a class="nav-logo" href="index.html">
             <img src="pateltales_logo.png" alt="PatelTales" />
         </a>
@@ -282,7 +312,7 @@
         </div>
     </nav>
 
-    <!-- ANA hero banner (shown only on ANA tab) -->
+    <!-- ANA hero banner -->
     <div class="section-hero" id="ana-hero" style="display:none;">
         <div class="section-hero-overlay"></div>
         <div class="section-hero-content">
@@ -292,9 +322,28 @@
         </div>
     </div>
 
+    <!-- Orca hero banner -->
+    <div class="section-hero" id="orca-hero" style="display:none;">
+        <div class="section-hero-overlay"></div>
+        <div class="section-hero-content">
+            <span class="section-hero-eyebrow">PatelTales Photography</span>
+            <h1>Orca Running</h1>
+            <p class="section-hero-sub">Train &nbsp;·&nbsp; Compete &nbsp;·&nbsp; Conquer</p>
+        </div>
+    </div>
+
+    <!-- General hero banner -->
+    <div class="section-hero" id="general-hero" style="display:none;">
+        <div class="section-hero-overlay"></div>
+        <div class="section-hero-content">
+            <span class="section-hero-eyebrow">PatelTales Photography</span>
+            <h1>Gallery</h1>
+            <p class="section-hero-sub">Moments &nbsp;·&nbsp; Stories &nbsp;·&nbsp; Life</p>
+        </div>
+    </div>
+
     <!-- Galleries -->
     <div class="page" id="page">
-        <!-- One grid per category, built by JS -->
         <div class="gallery-section active" id="section-ana"></div>
         <div class="gallery-section" id="section-orca"></div>
         <div class="gallery-section" id="section-general"></div>
@@ -314,21 +363,28 @@
     </footer>
 
     <script>
+        // Hamburger
         document.getElementById('nav-toggle').addEventListener('click', function () {
             document.getElementById('nav-links').classList.toggle('open');
         });
+
+        // Nav scroll → white frosted
+        const nav = document.getElementById('main-nav');
+        window.addEventListener('scroll', function () {
+            nav.classList.toggle('scrolled', window.scrollY > 20);
+        }, { passive: true });
     </script>
     <script src="galleries-data.js"></script>
     <script>
-        // Read ?tab= from URL, default to first tab
         const urlTab = new URLSearchParams(window.location.search).get('tab') || TABS[0].id;
 
-        // Show ANA hero only on ANA tab, adjust page padding accordingly
-        const anaHero = document.getElementById('ana-hero');
-        const page    = document.getElementById('page');
+        // Show the appropriate hero
         if (urlTab === 'ana') {
-            anaHero.style.display = 'flex';
-            page.classList.add('with-hero');
+            document.getElementById('ana-hero').style.display = 'flex';
+        } else if (urlTab === 'orca') {
+            document.getElementById('orca-hero').style.display = 'flex';
+        } else {
+            document.getElementById('general-hero').style.display = 'flex';
         }
 
         // Activate the correct section
@@ -346,7 +402,6 @@
             const section = document.getElementById(`section-${g.category}`);
             if (!section) return;
 
-            // Create grid inside section if it doesn't exist yet
             let grid = section.querySelector('.gallery-grid');
             if (!grid) {
                 grid = document.createElement('div');
@@ -359,7 +414,7 @@
             a.href = `gallery.html?id=${g.id}`;
             a.innerHTML = `
                 <img src="${S3_BASE}/${g.id}/${g.cover}" alt="${g.title}" loading="lazy" />
-                <div class="event-title">${g.title}</div>`;
+                <div class="event-overlay"><p class="event-title">${g.title}</p></div>`;
             grid.appendChild(a);
         });
     </script>

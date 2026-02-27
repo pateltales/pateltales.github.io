@@ -1,18 +1,14 @@
-/* gallery.css */
+/* gallery.css — white theme, masonry layout */
 
 *, *::before, *::after { box-sizing: border-box; }
 
 body {
   margin: 0;
   padding: 0;
-  background-color: #ffffff;
+  background: #fff;
   color: #1a1a1a;
   font-family: 'Poppins', sans-serif;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   min-height: 100vh;
-  text-align: center;
   padding-top: 61px; /* nav height */
 }
 
@@ -55,11 +51,16 @@ body {
 
 .nav-links a:hover { color: #999; }
 
-h1 {
-  font-size: 2.2rem;
-  margin: 20px 0 10px;
-  font-weight: 700;
-  letter-spacing: 1px;
+/* ── Gallery title ── */
+.gallery-title {
+  font-size: 1.9rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  text-align: center;
+  padding: 28px 20px 20px;
+  margin: 0;
+  letter-spacing: 0.3px;
+  animation: fadeIn 0.8s ease-in-out;
 }
 
 .fade-in {
@@ -67,63 +68,63 @@ h1 {
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-16px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-p.intro {
-  max-width: 700px;
-  margin: 0 auto 30px;
-  font-size: 1rem;
-  color: #999;
-  font-weight: 300;
-  line-height: 1.6;
-}
-
-
+/* ── Masonry gallery ── */
 #gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 12px;
-  max-width: 1200px;
-  padding: 0 10px 10px;
-  margin: 0 auto;
+  columns: 3 260px;
+  column-gap: 3px;
+  padding: 0 3px 3px;
   width: 100%;
+  line-height: 0;
 }
 
 #gallery a {
-  content-visibility: auto;
-  contain-intrinsic-size: auto 200px;
+  display: block;
+  break-inside: avoid;
+  margin-bottom: 3px;
+  overflow: hidden;
+  position: relative;
+  cursor: zoom-in;
+  line-height: 0;
 }
+
+/* Hover overlay */
+#gallery a::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.18);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+
+#gallery a:hover::after { opacity: 1; }
 
 #gallery a img {
   width: 100%;
-  height: 200px;
-  object-fit: cover;
-  border-radius: 8px;
-  transition: transform 0.25s ease;
+  height: auto;
+  display: block;
+  transition: transform 0.4s ease;
   user-select: none;
-  cursor: pointer;
 }
 
 #gallery a:hover img {
-  transform: scale(1.03);
+  transform: scale(1.04);
 }
 
 /* ── Skeleton loader ── */
 .skeleton-item {
   width: 100%;
-  height: 200px;
-  border-radius: 8px;
+  height: 220px;
   background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
   background-size: 200% 100%;
   animation: shimmer 1.4s ease-in-out infinite;
+  break-inside: avoid;
+  margin-bottom: 3px;
 }
 
 @keyframes shimmer {
@@ -135,8 +136,10 @@ p.intro {
   color: #aaa;
   font-size: 0.9rem;
   padding: 40px;
+  text-align: center;
 }
 
+/* ── Pagination ── */
 .pagination {
   display: flex;
   justify-content: center;
@@ -168,6 +171,7 @@ p.intro {
   cursor: default;
 }
 
+/* ── Footer ── */
 footer.gallery-footer {
   background: #fafafa;
   padding: 28px 10px;
@@ -217,19 +221,19 @@ footer.gallery-footer p {
   transition: all 0.25s;
 }
 
+/* ── Responsive ── */
 @media screen and (max-width: 700px) {
-  h1 {
-    font-size: 1.7rem;
+  .gallery-title {
+    font-size: 1.5rem;
+    padding: 20px 16px 16px;
   }
 
-  #gallery a img {
-    height: 150px;
+  #gallery {
+    columns: 2 130px;
   }
 
-  /* Hamburger visible on mobile */
   .nav-toggle { display: flex; }
 
-  /* Nav links collapse to dropdown */
   .nav-links {
     display: none;
     position: fixed;
@@ -252,9 +256,99 @@ footer.gallery-footer p {
     font-size: 0.78rem;
     letter-spacing: 1.6px;
   }
+
+  .nav { padding: 12px 20px; }
 }
 
-/* ── Mobile LightGallery fixes — keep close btn always visible ── */
+@media screen and (min-width: 1600px) {
+  #gallery {
+    columns: 4 280px;
+  }
+}
+
+/* ── LightGallery — white theme ── */
+
+.lg-backdrop {
+  background: #fff;
+}
+
+.lg-outer .lg-inner {
+  background: #fff;
+}
+
+.lg-toolbar {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid #ebebeb;
+}
+
+.lg-toolbar .lg-icon,
+.lg-close,
+.lg-download {
+  color: #1a1a1a !important;
+}
+
+.lg-toolbar .lg-icon:hover,
+.lg-close:hover,
+.lg-download:hover {
+  color: #555 !important;
+  background: rgba(0, 0, 0, 0.05) !important;
+}
+
+.lg-actions .lg-next,
+.lg-actions .lg-prev {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #e0e0e0;
+  border-radius: 50%;
+  color: #1a1a1a;
+  width: 44px;
+  height: 44px;
+  line-height: 44px;
+}
+
+.lg-actions .lg-next:hover,
+.lg-actions .lg-prev:hover {
+  background: #1a1a1a;
+  border-color: #1a1a1a;
+  color: #fff;
+}
+
+.lg-counter {
+  color: #888;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.78rem;
+}
+
+.lg-sub-html {
+  background: rgba(255, 255, 255, 0.88);
+  color: #888;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.78rem;
+  border-top: 1px solid #ebebeb;
+}
+
+.lg-sub-html h4 {
+  margin: 0;
+  font-weight: 400;
+}
+
+.lg-thumb-outer {
+  background: rgba(250, 250, 250, 0.95);
+  border-top: 1px solid #ebebeb;
+}
+
+.lg-thumb-item {
+  border: 2px solid transparent;
+  border-radius: 4px;
+}
+
+.lg-thumb-item.active,
+.lg-thumb-item:hover {
+  border-color: #1a1a1a;
+}
+
+/* ── Mobile LightGallery — keep close btn always visible ── */
 @media screen and (max-width: 768px) {
   .lg-toolbar {
     opacity: 1 !important;
@@ -277,102 +371,4 @@ footer.gallery-footer p {
     height: 38px;
     line-height: 38px;
   }
-}
-
-.gallery-title {
-  font-size: 1.9rem;
-  font-weight: 600;
-  color: #1a1a1a;
-  margin: 10px 0 28px;
-  letter-spacing: 0.3px;
-  animation: fadeIn 0.8s ease-in-out;
-}
-
-/* ── LightGallery — white theme ────────────────────────────── */
-
-/* Backdrop: white instead of black */
-.lg-backdrop {
-  background: #fff;
-}
-
-/* Main image area */
-.lg-outer .lg-inner {
-  background: #fff;
-}
-
-/* Top toolbar */
-.lg-toolbar {
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid #ebebeb;
-}
-
-.lg-toolbar .lg-icon,
-.lg-close,
-.lg-download {
-  color: #1a1a1a !important;
-}
-
-.lg-toolbar .lg-icon:hover,
-.lg-close:hover,
-.lg-download:hover {
-  color: #555 !important;
-  background: rgba(0, 0, 0, 0.05) !important;
-}
-
-/* Prev / next arrows */
-.lg-actions .lg-next,
-.lg-actions .lg-prev {
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid #e0e0e0;
-  border-radius: 50%;
-  color: #1a1a1a;
-  width: 44px;
-  height: 44px;
-  line-height: 44px;
-}
-
-.lg-actions .lg-next:hover,
-.lg-actions .lg-prev:hover {
-  background: #1a1a1a;
-  border-color: #1a1a1a;
-  color: #fff;
-}
-
-/* Photo counter */
-.lg-counter {
-  color: #888;
-  font-family: 'Poppins', sans-serif;
-  font-size: 0.78rem;
-}
-
-/* Caption */
-.lg-sub-html {
-  background: rgba(255, 255, 255, 0.88);
-  color: #888;
-  font-family: 'Poppins', sans-serif;
-  font-size: 0.78rem;
-  border-top: 1px solid #ebebeb;
-}
-
-.lg-sub-html h4 {
-  margin: 0;
-  font-weight: 400;
-}
-
-/* Thumbnail strip */
-.lg-thumb-outer {
-  background: rgba(250, 250, 250, 0.95);
-  border-top: 1px solid #ebebeb;
-}
-
-.lg-thumb-item {
-  border: 2px solid transparent;
-  border-radius: 4px;
-}
-
-.lg-thumb-item.active,
-.lg-thumb-item:hover {
-  border-color: #1a1a1a;
 }
