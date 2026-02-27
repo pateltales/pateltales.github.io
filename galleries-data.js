@@ -33,7 +33,7 @@ const GALLERIES = [
   { id: 'soaring-eagle-2025', title: 'Soaring Eagle 2025',              cover: 'DSC05423.jpg', category: 'orca'    },
   { id: 'iron-horse-2025',   title: 'Iron Horse 2025',                 cover: '1-DSC04638.jpg', category: 'orca'  },
   { id: 'huskies',            title: 'Huskies Graduation',              cover: 'DSC06336.jpg', category: 'general' },
-  { id: 'gaga-graduation',    title: 'Gaga Graduation',                 cover: 'DSC06679.jpg', category: 'general' },
+  { id: 'gaga-graduation',    title: 'Gaga Graduation',                 cover: 'DSC06744.jpg', category: 'general' },
 ];
 
 const TABS = [
