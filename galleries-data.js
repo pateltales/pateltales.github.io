@@ -32,8 +32,9 @@ const GALLERIES = [
   { id: 'ana-track-072425',   title: 'ANA Run Coaching Jul 23rd',       cover: 'DSC02288.jpg', category: 'ana'     },
   { id: 'ana-track-070925',   title: 'ANA Run Coaching Jul 9th',        cover: 'DSC08875.jpg', category: 'ana'     },
   { id: 'ana-track-061825',   title: 'ANA Run Coaching Jun 18th',       cover: 'DSC07295.jpg', category: 'ana'     },
-  { id: 'soaring-eagle-2025', title: 'Soaring Eagle 2025',              cover: 'DSC05423.jpg', category: 'orca'    },
-  { id: 'iron-horse-2025',   title: 'Iron Horse 2025',                 cover: '1-DSC04638.jpg', category: 'orca'  },
+  { id: 'orca-half-2025',     title: 'Orca HM 2025',                    cover: 'DSC00206.jpg',   category: 'orca'    },
+  { id: 'iron-horse-2025',    title: 'Iron Horse 2025',                 cover: '1-DSC04638.jpg', category: 'orca'    },
+  { id: 'soaring-eagle-2025', title: 'Soaring Eagle 2025',              cover: 'DSC05423.jpg',   category: 'orca'    },
   { id: 'huskies',            title: 'Huskies Graduation',              cover: 'DSC06336.jpg', category: 'general' },
   { id: 'gaga-graduation',    title: 'Gaga Graduation',                 cover: 'DSC06744.jpg', category: 'general' },
 ];
