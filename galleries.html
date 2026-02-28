@@ -288,6 +288,54 @@
         @media (max-width: 600px) {
             .gallery-grid { grid-template-columns: 1fr; }
         }
+
+        /* ── Floating Sidebar ── */
+        .gallery-sidebar {
+            position: fixed;
+            right: 36px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 90;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            text-align: right;
+        }
+
+        .gallery-sidebar a {
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 1.8px;
+            text-transform: uppercase;
+            color: #ffffff;
+            transition: opacity 0.2s;
+        }
+
+        .gallery-sidebar a:hover { opacity: 0.5; }
+
+        @media (max-width: 960px) {
+            .gallery-sidebar {
+                flex-direction: row;
+                top: auto;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                transform: none;
+                gap: 28px;
+                padding: 14px 22px;
+                overflow-x: auto;
+                text-align: left;
+                background: rgba(0, 0, 0, 0.48);
+                backdrop-filter: blur(14px);
+                -webkit-backdrop-filter: blur(14px);
+                white-space: nowrap;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .gallery-sidebar a { flex-shrink: 0; }
+
+            footer { padding-bottom: 58px; }
+        }
     </style>
 </head>
 
@@ -348,6 +396,9 @@
         <div class="gallery-section" id="section-general"></div>
     </div>
 
+    <!-- Floating sidebar -->
+    <div class="gallery-sidebar" id="gallery-sidebar"></div>
+
     <!-- Footer -->
     <footer>
         <p>&copy; 2026 PatelTales</p>
@@ -394,6 +445,15 @@
         // Highlight the matching nav link
         document.querySelectorAll('#nav-links a').forEach(a => {
             a.classList.toggle('active', a.href.includes(`tab=${urlTab}`));
+        });
+
+        // Build floating sidebar
+        const sidebar = document.getElementById('gallery-sidebar');
+        GALLERIES.filter(g => g.category === urlTab).forEach(g => {
+            const a = document.createElement('a');
+            a.href = `gallery.html?id=${g.id}`;
+            a.textContent = g.title;
+            sidebar.appendChild(a);
         });
 
         // Build gallery grids from data
