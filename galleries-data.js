@@ -18,6 +18,7 @@ const S3_BASE = 'https://pateltales-photography.s3.us-east-2.amazonaws.com';
 
 const GALLERIES = [
   { id: 'nati-aelred',        title: 'Proposal Feb 25th 2026',          cover: '20260225-DSC02359.jpg', category: 'general'  },
+  { id: 'tank-wedding',       title: 'M&M Wedding 2025',                cover: 'DSC05452.jpg',          category: 'general'  },
   { id: 'ana-track-011426',   title: 'ANA Run Coaching Jan 14th 2026', cover: 'DSC04697.jpg', category: 'ana'     },
   { id: 'ana-track-102925',   title: 'ANA Run Coaching Oct 29th',       cover: 'DSC09480.jpg', category: 'ana'     },
   { id: 'tom-halloween-2025', title: "Tom's Halloween 2025",            cover: 'DSC09421.jpg', category: 'general' },
