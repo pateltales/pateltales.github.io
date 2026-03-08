@@ -17,6 +17,7 @@
 const S3_BASE = 'https://pateltales-photography.s3.us-east-2.amazonaws.com';
 
 const GALLERIES = [
+  { id: 'desi-runners-100',   title: 'Desi Runners 100th Run',             cover: 'DSC09644.jpg',         category: 'general'  },
   { id: 'nati-aelred',        title: 'Proposal Feb 25th 2026',          cover: '20260225-DSC02359.jpg', category: 'general'  },
   { id: 'tank-wedding',       title: 'M&M Wedding 2025',                cover: 'DSC05452.jpg',          category: 'general'  },
   { id: 'ana-track-011426',   title: 'ANA Run Coaching Jan 14th 2026', cover: 'DSC04697.jpg', category: 'ana'     },
