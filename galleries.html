@@ -473,7 +473,7 @@
             a.className = 'event';
             a.href = `gallery.html?id=${g.id}`;
             a.innerHTML = `
-                <img src="${S3_BASE}/${g.id}/${g.cover}" alt="${g.title}" loading="lazy" />
+                <img src="${S3_BASE}/${g.id}/${g.cover}" alt="${g.title}" loading="lazy" ${g.coverPosition ? `style="object-position:${g.coverPosition}"` : ''}/>
                 <div class="event-overlay"><p class="event-title">${g.title}</p></div>`;
             grid.appendChild(a);
         });
