@@ -9,14 +9,16 @@
 //   title    — display name shown in the gallery grid and page title
 //   cover    — filename of the cover/thumbnail photo
 //   category — which tab it appears under:
-//                'ana'     → ANA Run Coaching
-//                'orca'    → Orca Running
-//                'general' → Gallery
+//                'ana'      → ANA Run Coaching
+//                'orca'     → Orca Running
+//                'general'  → Gallery
+//                'portrait' → Portrait
 // ============================================================
 
 const S3_BASE = 'https://pateltales-photography.s3.us-east-2.amazonaws.com';
 
 const GALLERIES = [
+  { id: 'portraits/gaga', title: 'Yulha', cover: '20260315-DSC05629.jpg', category: 'portrait' },
   { id: 'desi-runners-100',   title: 'Desi Runners 100th Run',             cover: 'DSC09644.jpg',         category: 'general'  },
   { id: 'nati-aelred',        title: 'Proposal Feb 25th 2026',          cover: '20260225-DSC02359.jpg', category: 'general'  },
   { id: 'tank-wedding',       title: 'M&M Wedding 2025',                cover: 'DSC05452.jpg',          category: 'general'  },
@@ -42,7 +44,8 @@ const GALLERIES = [
 ];
 
 const TABS = [
-  { id: 'ana',     label: 'ANA Run Coaching' },
-  { id: 'orca',    label: 'Orca Running'        },
-  { id: 'general', label: 'Gallery'             },
+  { id: 'ana',      label: 'ANA Run Coaching' },
+  { id: 'orca',     label: 'Orca Running'     },
+  { id: 'portrait', label: 'Portraits'         },
+  { id: 'general',  label: 'Gallery'          },
 ];

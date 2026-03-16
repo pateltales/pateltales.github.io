@@ -112,6 +112,10 @@
             background-image: url('https://pateltales-photography.s3.us-east-2.amazonaws.com/iron-horse-2025/3-DSC04562.jpg');
         }
 
+        #portrait-hero {
+            background-image: url('https://pateltales-photography.s3.us-east-2.amazonaws.com/portraits/gaga/20260315-DSC05689.jpg');
+        }
+
         #general-hero {
             background-image: url('https://pateltales-photography.s3.us-east-2.amazonaws.com/huskies/DSC06426.jpg');
         }
@@ -210,6 +214,31 @@
         }
 
         .event:hover img { transform: scale(1.06); }
+
+        /* ── Portrait grid — tall 2:3 cards, 3-up ── */
+        .portrait-section .gallery-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .portrait-section .event {
+            aspect-ratio: 2 / 3;
+        }
+
+        .portrait-section .event-overlay {
+            padding: 80px 18px 20px;
+        }
+
+        @media (max-width: 960px) {
+            .portrait-section .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 500px) {
+            .portrait-section .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+        }
 
         /* ── Footer ── */
         footer {
@@ -354,6 +383,7 @@
             <a href="/">Home</a>
             <a href="galleries.html?tab=ana">ANA Run Coaching</a>
             <a href="galleries.html?tab=orca">Orca Running</a>
+            <a href="galleries.html?tab=portrait">Portraits</a>
             <a href="galleries.html?tab=general">Gallery</a>
             <!-- <a href="podcast.html">Podcast</a> -->
             <a href="about.html">About</a>
@@ -380,6 +410,16 @@
         </div>
     </div>
 
+    <!-- Portrait hero banner -->
+    <div class="section-hero" id="portrait-hero" style="display:none;">
+        <div class="section-hero-overlay"></div>
+        <div class="section-hero-content">
+            <span class="section-hero-eyebrow">PatelTales Photography</span>
+            <h1>Portraits</h1>
+            <p class="section-hero-sub">Light &nbsp;·&nbsp; Person &nbsp;·&nbsp; Story</p>
+        </div>
+    </div>
+
     <!-- General hero banner -->
     <div class="section-hero" id="general-hero" style="display:none;">
         <div class="section-hero-overlay"></div>
@@ -394,6 +434,7 @@
     <div class="page" id="page">
         <div class="gallery-section active" id="section-ana"></div>
         <div class="gallery-section" id="section-orca"></div>
+        <div class="gallery-section portrait-section" id="section-portrait"></div>
         <div class="gallery-section" id="section-general"></div>
     </div>
 
@@ -434,6 +475,8 @@
             document.getElementById('ana-hero').style.display = 'flex';
         } else if (urlTab === 'orca') {
             document.getElementById('orca-hero').style.display = 'flex';
+        } else if (urlTab === 'portrait') {
+            document.getElementById('portrait-hero').style.display = 'flex';
         } else {
             document.getElementById('general-hero').style.display = 'flex';
         }
