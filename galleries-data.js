@@ -26,7 +26,6 @@ const GALLERIES = [
   { id: 'ana-track-031826',   title: 'ANA Run Coaching Mar 18th 2026', cover: '20260318-DSC06279.jpg', category: 'ana'     },
   { id: 'ana-track-011426',   title: 'ANA Run Coaching Jan 14th 2026', cover: 'DSC04697.jpg', category: 'ana'     },
   { id: 'ana-track-102925',   title: 'ANA Run Coaching Oct 29th',       cover: 'DSC09480.jpg', category: 'ana'     },
-  { id: 'tom-halloween-2025', title: "Tom's Halloween 2025",            cover: 'DSC09421.jpg', category: 'general' },
   { id: 'diwali-mela-2025',   title: 'Live2Dance Diwali Mela 2025',     cover: 'DSC00975.jpg', category: 'general' },
   { id: 'ana-track-101525',   title: 'ANA Run Coaching Oct 15th',       cover: 'DSC00356.jpg', category: 'ana'     },
   { id: 'ana-track-100125',   title: 'ANA Run Coaching Oct 1st',        cover: 'DSC09097.jpg', category: 'ana'     },
