@@ -20,6 +20,7 @@ const S3_BASE = 'https://pateltales-photography.s3.us-east-2.amazonaws.com';
 const GALLERIES = [
   { id: 'portraits/gaga', title: 'Yulha', cover: '20260315-DSC05629.jpg', category: 'portrait' },
   { id: 'portraits/yasab-feser', title: 'Yasab', cover: '20260315-DSC05854.jpg', category: 'portrait' },
+  { id: 'sic-0411',   title: 'Seattle Inner Circle Apr 11th 2026',             cover: '20260411-DSC08477.jpg',         category: 'general'  },
   { id: 'desi-runners-100',   title: 'Desi Runners 100th Run',             cover: 'DSC09644.jpg',         category: 'general'  },
   { id: 'nati-aelred',        title: 'Proposal Feb 25th 2026',          cover: '20260225-DSC02359.jpg', category: 'general'  },
   { id: 'tank-wedding',       title: 'M&M Wedding 2025',                cover: 'DSC05452.jpg',          category: 'general'  },
