@@ -20,6 +20,7 @@ const S3_BASE = 'https://pateltales-photography.s3.us-east-2.amazonaws.com';
 const GALLERIES = [
     { id: 'sma-run-05302026', title: 'SMA Run May 30th 2026', cover: '20260530-DSC09306.jpg', category: 'general' },
   { id: 'sma-2026', title: 'Seattle Marathon Ambassadors', cover: '20260522-DSC08782.jpg', category: 'general' },
+  { id: 'aj-boy', title: 'SMA Run May 30th 2026', cover: '20260530-DSC09632.jpg', category: 'general' },
   { id: 'portraits/gaga', title: 'Yulha', cover: '20260315-DSC05629.jpg', category: 'portrait' },
   { id: 'portraits/yasab-feser', title: 'Yasab', cover: '20260315-DSC05854.jpg', category: 'portrait' },
   { id: 'sic-0411',   title: 'Seattle Inner Circle Apr 11th 2026',             cover: '20260411-DSC08477.jpg',         category: 'general'  },
