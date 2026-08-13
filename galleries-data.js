@@ -28,6 +28,7 @@ const GALLERIES = [
   { id: 'desi-runners-100',   title: 'Desi Runners 100th Run',             cover: 'DSC09644.jpg',         category: 'general'  },
   { id: 'nati-aelred',        title: 'Proposal Feb 25th 2026',          cover: '20260225-DSC02359.jpg', category: 'general'  },
   { id: 'tank-wedding',       title: 'M&M Wedding 2025',                cover: 'DSC05452.jpg',          category: 'general'  },
+  { id: 'ana-track-081226',   title: 'ANA Run Coaching Aug 12th 2026', cover: '20260812-DSC02071.jpg', category: 'ana'     },
   { id: 'ana-track-072926',   title: 'ANA Run Coaching Jul 29th 2026', cover: '20260729-DSC00768.jpg', category: 'ana'     },
   { id: 'ana-track-072226',   title: 'ANA Run Coaching Jul 22nd 2026', cover: '20260722-DSC00011.jpg', category: 'ana'     },
   { id: 'ana-track-070826',   title: 'ANA Run Coaching Jul 8th 2026', cover: '20260708-DSC08725.jpg', category: 'ana'     },
