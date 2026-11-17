@@ -19,6 +19,7 @@ const S3_BASE = 'https://pateltales-photography.s3.us-east-2.amazonaws.com';
 
 const GALLERIES = [
     { id: 'sma-run-05302026', title: 'SMA Run May 30th 2026', cover: '20260530-DSC09306.jpg', category: 'general' },
+  { id: 'portraits/malia', title: 'Malia', cover: '20261115-DSC04810.jpg', category: 'portrait' },
   { id: 'portraits/amanda', title: 'Amanda', cover: '20260612-DSC09926.jpg', category: 'portrait' },
   { id: 'grand-ridge-2026', title: 'Grand Ridge 2026', cover: '20261107-DSC02579.jpg', category: 'orca' },
   { id: 'snoqualmie-half-2026', title: 'Snoqualmie Half Marathon 2026', cover: '20260620-DSC07264.jpg', category: 'orca' },
